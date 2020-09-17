@@ -21,18 +21,16 @@ services:
       - www
 
   mysql:
-    image: mysql:5.7.22
+    image: mysql:8.0
     container_name: mysql
     restart: always
     tty: true
-    command: --innodb-use-native-aio=0
+    command: --innodb-use-native-aio=0 --default-authentication-plugin=mysql_native_password --sql_mode=""
     ports:
       - "3306:3306"
     environment: 
       MYSQL_ALLOW_EMPTY_PASSWORD: ${MYSQL_ALLOW_EMPTY_PASSWORD}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       TZ: ${TZ}
     volumes:
       - "${VOLUMES_ROOT}/mysql/my.cnf:/etc/mysql/conf.d/my.cnf"

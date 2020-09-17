@@ -1,8 +1,8 @@
 ## docker-compose for php
 
 ## .env
-1. 將.env.example複製成.env
-2. 有時更新.env時需要重載image
+1. Copy .env.example to .env.
+2. Sometimes you need to reload image after updated .env.
 
 ## Run
 ```shell
@@ -20,4 +20,5 @@ docker-compose exec php /bin/sh
 ## Restart
 ```shell
 docker-compose restart nginx
+docker-compose restart mysql
 ```
