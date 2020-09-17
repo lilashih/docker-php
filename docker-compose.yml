@@ -11,7 +11,7 @@ services:
     ports:
      - "80:80"
     volumes: 
-     - "${VOLUMES_ROOT}/nginx/default.conf:/etc/nginx/conf.d/default.conf"
+     - "${VOLUMES_ROOT}/nginx/conf:/etc/nginx/conf.d"
      - "${VOLUMES_ROOT}/nginx/log:/var/log/nginx"
      - "${VOLUMES_ROOT}/www:/var/www/html"
     depends_on:
@@ -29,9 +29,11 @@ services:
     ports:
       - "3306:3306"
     environment: 
+      MYSQL_ALLOW_EMPTY_PASSWORD: ${MYSQL_ALLOW_EMPTY_PASSWORD}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      TZ: ${TZ}
     volumes:
       - "${VOLUMES_ROOT}/mysql/my.cnf:/etc/mysql/conf.d/my.cnf"
       - "${VOLUMES_ROOT}/mysql/log:/var/log/mysql"
@@ -49,6 +51,8 @@ services:
       - "${VOLUMES_ROOT}/www:/var/www/html"
     ports: 
       - "9009:9000"
+    environment: 
+      TZ: ${TZ}
     networks:
      - www
 
