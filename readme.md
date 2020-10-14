@@ -22,3 +22,9 @@ docker-compose exec php /bin/sh
 docker-compose restart nginx
 docker-compose restart mysql
 ```
+
+## Laravel
+```shell
+docker-compose exec php /bin/sh
+composer create-project --prefer-dist laravel/laravel blog
+```
