@@ -1,8 +1,7 @@
 ## docker-compose for php
 
 ## .env
-1. Copy .env.example to .env.
-2. Sometimes you need to reload image after updated .env.
+Copy .env.example to .env.
 
 ## Run
 ```shell
