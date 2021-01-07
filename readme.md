@@ -20,6 +20,8 @@ docker-compose exec php /bin/sh
 ```shell
 docker-compose restart nginx
 docker-compose restart mysql
+// Or just run, it will recreate any containers that have changes(.env variables)
+docker-compose up -d
 ```
 
 ## Laravel
