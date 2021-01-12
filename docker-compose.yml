@@ -44,11 +44,12 @@ services:
   php:
     build:
       context: .
-      dockerfile: php.dockerfile
+      dockerfile: ${PHP_DOCKERFILE}
     container_name: php
     volumes:
       - "${VOLUMES_ROOT}/php/php.ini:/usr/local/etc/php/conf.d/php.ini"
       - "${VOLUMES_ROOT}/www:/var/www/html"
+      - "${VOLUMES_ROOT}/php/log:/var/log/php"
     ports: 
       - "9009:9000"
     environment: 
