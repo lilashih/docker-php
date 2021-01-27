@@ -1,7 +1,9 @@
-## docker-compose for php
+# docker-compose for php
 
 ## .env
 Copy .env.example to .env.
+- php.ini  
+According to your ``PHP_DOCKERFILE`` in the .env file to choose the xdebug settings in [php.ini](/php/php.ini).
 
 ## Run
 ```shell
