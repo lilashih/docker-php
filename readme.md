@@ -2,8 +2,9 @@
 
 ## .env
 Copy .env.example to .env.
+
 - php.ini  
-According to your ``PHP_DOCKERFILE`` in the .env file to choose the xdebug settings in [php.ini](/php/php.ini).
+Choosing the xdebug settings in [php.ini](/php/php.ini) according to your ``PHP_DOCKERFILE``.
 
 ## Run
 ```shell
@@ -15,6 +16,7 @@ docker-compose up -d
 ```shell
 docker-compose exec nginx bash
 docker-compose exec mysql bash
+docker-compose exec redis bash
 docker-compose exec php /bin/sh
 ```
 
@@ -22,7 +24,8 @@ docker-compose exec php /bin/sh
 ```shell
 docker-compose restart nginx
 docker-compose restart mysql
-// Or just run, it will recreate any containers that have changes(.env variables)
+
+// This will recreate any containers if ``.env`` have changes.
 docker-compose up -d
 ```
 
@@ -30,4 +33,10 @@ docker-compose up -d
 ```shell
 docker-compose exec php /bin/sh
 composer create-project --prefer-dist laravel/laravel blog
+```
+
+## Redis
+```shell
+docker-compose exec redis /bin/sh
+redis-cli
 ```

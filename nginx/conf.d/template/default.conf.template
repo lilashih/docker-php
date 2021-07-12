@@ -1,9 +1,9 @@
 server {
     listen 80;
-    index index.php index.html;
     server_name localhost;
-    error_log  /var/log/nginx/error.log;
-    access_log /var/log/nginx/access.log;
+    index index.php index.html;
+    error_log ${LOG_ROOT}/error-default.log;
+    access_log ${LOG_ROOT}/access-default.log;
     root /var/www/html;
 
     location / {
@@ -13,7 +13,7 @@ server {
     location ~ \.php$ {
         try_files $uri =404;
         fastcgi_split_path_info ^(.+\.php)(/.+)$;
-        fastcgi_pass php:9000;
+        fastcgi_pass ${PHP_NAME}:9000;
         fastcgi_index index.php;
         include fastcgi_params;
         fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;

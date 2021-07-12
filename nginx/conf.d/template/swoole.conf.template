@@ -1,0 +1,12 @@
+server {
+    listen 8018;
+    server_name localhost;
+    error_log  ${LOG_ROOT}/error-swoole.log;
+    access_log ${LOG_ROOT}/access-swoole.log;
+
+    location / {
+        if (!-e $request_filename) {
+            proxy_pass http://${PHP_NAME}:7000;
+        }
+    }
+}
