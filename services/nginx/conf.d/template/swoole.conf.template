@@ -6,7 +6,7 @@ server {
 
     location / {
         if (!-e $request_filename) {
-            proxy_pass http://${PHP_NAME}:7000;
+            proxy_pass http://php74:7000;
         }
     }
 }

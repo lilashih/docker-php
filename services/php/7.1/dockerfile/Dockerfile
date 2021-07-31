@@ -25,4 +25,4 @@ RUN apk add --update \
       libjpeg-turbo-dev \
       libpng-dev \
     && rm -rf /tmp/*
-WORKDIR /var/www/html
+WORKDIR /var/www/html/7.1

@@ -7,52 +7,84 @@ services:
   nginx:
     restart: always
     image: nginx:alpine
-    container_name: ${NGINX_NAME}
     volumes: 
-      - "${VOLUMES_ROOT}/nginx/conf.d/template:/etc/nginx/templates"
-      - "${VOLUMES_ROOT}/nginx/log:/var/log/nginx"
+      - "${VOLUMES_ROOT}/services/nginx/conf.d/template:/etc/nginx/templates"
+      - "${VOLUMES_ROOT}/log/nginx:/var/log/nginx"
       - "${VOLUMES_ROOT}/www:/var/www/html"
     environment:
-      PHP_NAME: ${PHP_NAME}
       LOG_ROOT: /var/log/nginx
     ports:
-      - "80:80"
-      - "8000-8020:8000-8020"
+      - "71:71"
+      - "74:74"
+      - "8000-8030:8000-8030"
     depends_on:
-      - php
-      - mysql
+      - php71
+      - php74
+      - mysql57
+      - mysql80
       - redis
     networks:
       - www
 
-  mysql:
-    image: mysql:8.0
-    container_name: ${MYSQL_NAME}
+  mysql57:
+    image: mysql:5.7
     restart: always
     tty: true
-    command: --innodb-use-native-aio=0 --default-authentication-plugin=mysql_native_password --sql_mode=""
+    command: mysqld --sql_mode=""
     volumes:
-      - "${VOLUMES_ROOT}/mysql/conf.d/my.cnf:/etc/mysql/conf.d/my.cnf"
-      - "${VOLUMES_ROOT}/mysql/log:/var/log/mysql"
-      - "${VOLUMES_ROOT}/mysql/data:/var/lib/mysql"
+      - "${VOLUMES_ROOT}/services/mysql/5.7/conf.d/my.cnf:/etc/mysql/conf.d/my.cnf"
+      - "${VOLUMES_ROOT}/log/mysql/5.7:/var/log/mysql"
+      - "${VOLUMES_ROOT}/data/mysql/5.7:/var/lib/mysql"
     environment: 
       MYSQL_ALLOW_EMPTY_PASSWORD: ${MYSQL_ALLOW_EMPTY_PASSWORD}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       TZ: ${TZ}
     ports:
-      - "${MYSQL_PORT}:3306"
+      - "${MYSQL_57_PORT}:3306"
     networks:
       - www
 
-  php:
+  mysql80:
+    image: mysql:8.0
+    restart: always
+    tty: true
+    command: mysqld --sql_mode=""
+    volumes:
+      - "${VOLUMES_ROOT}/services/mysql/8.0/conf.d/my.cnf:/etc/mysql/conf.d/my.cnf"
+      - "${VOLUMES_ROOT}/log/mysql/8.0:/var/log/mysql"
+      - "${VOLUMES_ROOT}/data/mysql/8.0:/var/lib/mysql"
+    environment: 
+      MYSQL_ALLOW_EMPTY_PASSWORD: ${MYSQL_ALLOW_EMPTY_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      TZ: ${TZ}
+    ports:
+      - "${MYSQL_80_PORT}:3306"
+    networks:
+      - www
+
+  php71:
     build:
       context: .
-      dockerfile: ${PHP_DOCKERFILE}
-    container_name: ${PHP_NAME}
+      dockerfile: ${VOLUMES_ROOT}/services/php/7.1/dockerfile/Dockerfile
     volumes:
-      - "${VOLUMES_ROOT}/php/conf.d/php.ini:/usr/local/etc/php/conf.d/php.ini"
+      - "${VOLUMES_ROOT}/services/php/7.1/conf.d/php.ini:/usr/local/etc/php/conf.d/php.ini"
       - "${VOLUMES_ROOT}/www:/var/www/html"
-      - "${VOLUMES_ROOT}/php/log:/var/log/php"
+      - "${VOLUMES_ROOT}/log/php/7.1:/var/log/php"
+    environment: 
+      HOST: ${HOST}
+      LOG_ROOT: /var/log/php
+      TZ: ${TZ}
+    networks:
+      - www
+
+  php74:
+    build:
+      context: .
+      dockerfile: ${VOLUMES_ROOT}/services/php/7.4/dockerfile/Dockerfile
+    volumes:
+      - "${VOLUMES_ROOT}/services/php/7.4/conf.d/php.ini:/usr/local/etc/php/conf.d/php.ini"
+      - "${VOLUMES_ROOT}/www:/var/www/html"
+      - "${VOLUMES_ROOT}/log/php/7.4:/var/log/php"
     environment: 
       HOST: ${HOST}
       LOG_ROOT: /var/log/php
@@ -62,10 +94,9 @@ services:
 
   redis:
     image: redis:alpine
-    container_name: ${REDIS_NAME}
     volumes:
-      - "${VOLUMES_ROOT}/redis/redis.conf:/usr/local/etc/redis/redis.conf"
-      - "${VOLUMES_ROOT}/redis/log:/var/log/redis"
+      - "${VOLUMES_ROOT}/services/redis/redis.conf:/usr/local/etc/redis/redis.conf"
+      - "${VOLUMES_ROOT}/log/redis:/var/log/redis"
     ports:
       - ${REDIS_PORT}:6379
     networks:
@@ -73,11 +104,24 @@ services:
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
-    container_name: ${PHPMYADMIN_NAME}
     environment:
-      PMA_HOST: ${HOST}
-      PMA_PORT: ${MYSQL_PORT}
+      PMA_HOSTS: "${HOST},${HOST}"
+      PMA_PORTS: "${MYSQL_57_PORT},${MYSQL_80_PORT}"
+      PMA_VERBOSES: "mysql-5.7,mysql-8.0"
     ports:
       - "${PHPMYADMIN_PORT}:80"
     depends_on:
-      - mysql
+      - mysql57
+      - mysql80
+  
+  phpredisadmin:
+    image: erikdubbelboer/phpredisadmin
+    environment:
+      - REDIS_1_HOST=redis
+      - REDIS_1_PORT=6379
+    ports:
+      - "${REDISMYADMIN_PORT}:80"
+    depends_on:
+      - redis
+    networks:
+      - www
