@@ -1,4 +1,5 @@
 *
 !.gitignore
 !default.conf.template
+!default-ssl.conf.template
 !swoole.conf.template

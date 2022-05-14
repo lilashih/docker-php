@@ -1,29 +1,10 @@
 server {
-    listen 56;
+    listen 711 ssl;
     server_name localhost;
-    index index.php index.html;
-    error_log ${LOG_ROOT}/error-default.log;
-    access_log ${LOG_ROOT}/access-default.log;
-    root /var/www/html/5.6;
+    
+    ssl_certificate /etc/nginx/ssl/ssl.csr;
+    ssl_certificate_key /etc/nginx/ssl/ssl.key;
 
-    location / {
-        try_files $uri $uri/ /index.php?$query_string;
-    }
-
-    location ~ \.php$ {
-        try_files $uri = 404;
-        fastcgi_split_path_info ^(.+\.php)(/.+)$;
-        fastcgi_pass php56:9000;
-        fastcgi_index index.php;
-        include fastcgi_params;
-        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-        fastcgi_param PATH_INFO $fastcgi_path_info;
-    }
-}
-
-server {
-    listen 71;
-    server_name localhost;
     index index.php index.html;
     error_log ${LOG_ROOT}/error-default.log;
     access_log ${LOG_ROOT}/access-default.log;
@@ -45,8 +26,12 @@ server {
 }
 
 server {
-    listen 74;
+    listen 744 ssl;
     server_name localhost;
+    
+    ssl_certificate /etc/nginx/ssl/ssl.csr;
+    ssl_certificate_key /etc/nginx/ssl/ssl.key;
+
     index index.php index.html;
     error_log ${LOG_ROOT}/error-default.log;
     access_log ${LOG_ROOT}/access-default.log;

@@ -9,19 +9,25 @@ services:
     image: nginx:alpine
     volumes: 
       - "${VOLUMES_ROOT}/services/nginx/conf.d/template:/etc/nginx/templates"
+      - "${VOLUMES_ROOT}/services/nginx/ssl:/etc/nginx/ssl"
       - "${VOLUMES_ROOT}/log/nginx:/var/log/nginx"
       - "${VOLUMES_ROOT}/www:/var/www/html"
     environment:
       LOG_ROOT: /var/log/nginx
     ports:
+      - "56:56"
       - "71:71"
+      - "711:711"
       - "74:74"
+      - "744:744"
       - "8000-8030:8000-8030"
     depends_on:
+      - php56
       - php71
       - php74
       - mysql57
       - mysql80
+      - mariadb
       - redis
     networks:
       - www
@@ -59,6 +65,37 @@ services:
       TZ: ${TZ}
     ports:
       - "${MYSQL_80_PORT}:3306"
+    networks:
+      - www
+  
+  mariadb:
+    image: mariadb:10.2.10
+    restart: always
+    tty: true
+    volumes:
+      - "${VOLUMES_ROOT}/log/mariadb/10.2.10:/var/log/mysql"
+      - "${VOLUMES_ROOT}/data/mariadb/10.2.10:/var/lib/mysql"
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: ${MYSQL_ALLOW_EMPTY_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_RANDOM_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    ports: 
+      - "${MARIADB_PORT}:3306"
+    networks:
+      - www
+
+  php56:
+    build:
+      context: .
+      dockerfile: ${VOLUMES_ROOT}/services/php/5.6/dockerfile/Dockerfile
+    volumes:
+      - "${VOLUMES_ROOT}/services/php/5.6/conf.d/php.ini:/usr/local/etc/php/conf.d/php.ini"
+      - "${VOLUMES_ROOT}/www:/var/www/html"
+      - "${VOLUMES_ROOT}/log/php/5.6:/var/log/php"
+    environment: 
+      HOST: ${HOST}
+      LOG_ROOT: /var/log/php
+      TZ: ${TZ}
     networks:
       - www
 
@@ -105,9 +142,9 @@ services:
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     environment:
-      PMA_HOSTS: "${HOST},${HOST}"
-      PMA_PORTS: "${MYSQL_57_PORT},${MYSQL_80_PORT}"
-      PMA_VERBOSES: "mysql-5.7,mysql-8.0"
+      PMA_HOSTS: "${HOST},${HOST},${HOST}"
+      PMA_PORTS: "${MYSQL_57_PORT},${MYSQL_80_PORT},${MARIADB_PORT}"
+      PMA_VERBOSES: "mysql-5.7,mysql-8.0,mariadb"
     ports:
       - "${PHPMYADMIN_PORT}:80"
     depends_on:

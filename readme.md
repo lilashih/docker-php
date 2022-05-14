@@ -12,7 +12,8 @@ docker-compose up -d
 ## Bash
 ```shell
 docker-compose exec nginx bash
-docker-compose exec redis bash
+
+docker-compose exec redis /bin/sh
 
 docker-compose exec mysql57 bash
 docker-compose exec mysql80 bash
@@ -33,7 +34,6 @@ docker-compose down
 docker-compose up -d
 ```
 
-
 ## Laravel
 ```shell
 docker-compose exec php74 /bin/sh
@@ -46,10 +46,21 @@ docker-compose exec php74 /bin/sh
 php 7.4/swoole.php
 ```
 
+## Mysql
+```shell
+mysql --host=localhost --port=6306 -uroot --default-character-set=utf8
+```
+
 ## Redis
 ```shell
 docker-compose exec redis /bin/sh
 redis-cli --raw
+```
+
+
+## SSL
+```shell
+openssl req -x509 -nodes -days 3650 -newkey rsa:2048 -keyout ssl.key -out ssl.csr
 ```
 
 ## phpmyadmin

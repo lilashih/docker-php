@@ -10,14 +10,20 @@ RUN apk add --update \
         freetype-dev \
         libjpeg-turbo-dev \
         autoconf \
+        g++ \
         make \
         gcc \
-        g++ \
         linux-headers \
+        openssl \
+        ffmpeg \
+        libxml2-dev \
+        imagemagick-dev \
+        imagemagick \
+        libtool \
         $PHPIZE_DEPS \
-    && pecl install xdebug swoole redis \
-    && docker-php-ext-install pdo pdo_mysql zip \ 
-    && docker-php-ext-enable xdebug swoole redis \
+    && pecl install xdebug swoole redis imagick \
+    && docker-php-ext-install pdo pdo_mysql zip exif \ 
+    && docker-php-ext-enable xdebug swoole redis imagick \
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
     && docker-php-ext-configure gd \
       --with-freetype=/usr/include/ \
