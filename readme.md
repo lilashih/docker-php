@@ -1,4 +1,5 @@
-# docker-compose for php
+# Docker Compose For PHP
+docker-compose for php
 
 ## .env
 Copy .env.example to .env.
