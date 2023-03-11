@@ -2,33 +2,140 @@ version: '3'
 
 networks:
   www:
-
+  
 services:
   nginx:
     restart: always
     image: nginx:alpine
     volumes: 
+      - "${VOLUMES_ROOT}/www:/var/www/html"
       - "${VOLUMES_ROOT}/services/nginx/conf.d/template:/etc/nginx/templates"
       - "${VOLUMES_ROOT}/services/nginx/ssl:/etc/nginx/ssl"
       - "${VOLUMES_ROOT}/log/nginx:/var/log/nginx"
-      - "${VOLUMES_ROOT}/www:/var/www/html"
     environment:
       LOG_ROOT: /var/log/nginx
     ports:
-      - "56:56"
-      - "71:71"
-      - "711:711"
-      - "74:74"
-      - "744:744"
+      - "81:81"
+      - "8143:8143"
+      - "7001:7001"
+      - "82:82"
+      - "443:443"
+      - "847:847"
       - "8000-8030:8000-8030"
     depends_on:
       - php56
       - php71
       - php74
+      - php80
+      - php81
+      - php82
       - mysql57
       - mysql80
       - mariadb
       - redis
+      - golang
+    networks:
+      - www
+  
+  golang:
+    build:
+      context: .
+      dockerfile: ${VOLUMES_ROOT}/services/golang/dockerfile/Dockerfile
+    tty: true
+    volumes:
+      - "${VOLUMES_ROOT}/www:/var/www/html"
+    environment: 
+      TZ: ${TZ}
+    networks:
+      - www
+
+  php56:
+    build:
+      context: .
+      dockerfile: ${VOLUMES_ROOT}/services/php/5.6/dockerfile/Dockerfile
+    volumes:
+      - "${VOLUMES_ROOT}/www:/var/www/html"
+      - "${VOLUMES_ROOT}/services/php/5.6/conf.d/php.ini:/usr/local/etc/php/conf.d/php.ini"
+      - "${VOLUMES_ROOT}/log/php/5.6:/var/log/php"
+    environment: 
+      HOST: ${HOST}
+      LOG_ROOT: /var/log/php
+      TZ: ${TZ}
+    networks:
+      - www
+
+  php71:
+    build:
+      context: .
+      dockerfile: ${VOLUMES_ROOT}/services/php/7.1/dockerfile/Dockerfile
+    volumes:
+      - "${VOLUMES_ROOT}/www:/var/www/html"
+      - "${VOLUMES_ROOT}/services/php/7.1/conf.d/php.ini:/usr/local/etc/php/conf.d/php.ini"
+      - "${VOLUMES_ROOT}/log/php/7.1:/var/log/php"
+    environment: 
+      HOST: ${HOST}
+      LOG_ROOT: /var/log/php
+      TZ: ${TZ}
+    networks:
+      - www
+
+  php74:
+    build:
+      context: .
+      dockerfile: ${VOLUMES_ROOT}/services/php/7.4/dockerfile/Dockerfile
+    volumes:
+      - "${VOLUMES_ROOT}/www:/var/www/html"
+      - "${VOLUMES_ROOT}/services/php/7.4/conf.d/php.ini:/usr/local/etc/php/conf.d/php.ini"
+      - "${VOLUMES_ROOT}/log/php/7.4:/var/log/php"
+    environment: 
+      HOST: ${HOST}
+      LOG_ROOT: /var/log/php
+      TZ: ${TZ}
+    networks:
+      - www
+
+  php80:
+    build:
+      context: .
+      dockerfile: ${VOLUMES_ROOT}/services/php/8.0/dockerfile/Dockerfile
+    volumes:
+      - "${VOLUMES_ROOT}/www:/var/www/html"
+      - "${VOLUMES_ROOT}/services/php/8.0/conf.d/php.ini:/usr/local/etc/php/conf.d/php.ini"
+      - "${VOLUMES_ROOT}/log/php/8.0:/var/log/php"
+    environment: 
+      HOST: ${HOST}
+      LOG_ROOT: /var/log/php
+      TZ: ${TZ}
+    networks:
+      - www
+
+  php81:
+    build:
+      context: .
+      dockerfile: ${VOLUMES_ROOT}/services/php/8.1/dockerfile/Dockerfile
+    volumes:
+      - "${VOLUMES_ROOT}/www:/var/www/html"
+      - "${VOLUMES_ROOT}/services/php/8.1/conf.d/php.ini:/usr/local/etc/php/conf.d/php.ini"
+      - "${VOLUMES_ROOT}/log/php/8.1:/var/log/php"
+    environment: 
+      HOST: ${HOST}
+      LOG_ROOT: /var/log/php
+      TZ: ${TZ}
+    networks:
+      - www
+
+  php82:
+    build:
+      context: .
+      dockerfile: ${VOLUMES_ROOT}/services/php/8.2/dockerfile/Dockerfile
+    volumes:
+      - "${VOLUMES_ROOT}/www:/var/www/html"
+      - "${VOLUMES_ROOT}/services/php/8.2/conf.d/php.ini:/usr/local/etc/php/conf.d/php.ini"
+      - "${VOLUMES_ROOT}/log/php/8.2:/var/log/php"
+    environment: 
+      HOST: ${HOST}
+      LOG_ROOT: /var/log/php
+      TZ: ${TZ}
     networks:
       - www
 
@@ -38,9 +145,11 @@ services:
     tty: true
     command: mysqld --sql_mode=""
     volumes:
+      - "${VOLUMES_ROOT}/www:/var/www/html"
       - "${VOLUMES_ROOT}/services/mysql/5.7/conf.d/my.cnf:/etc/mysql/conf.d/my.cnf"
       - "${VOLUMES_ROOT}/log/mysql/5.7:/var/log/mysql"
       - "${VOLUMES_ROOT}/data/mysql/5.7:/var/lib/mysql"
+    working_dir: "/var/www/html"
     environment: 
       MYSQL_ALLOW_EMPTY_PASSWORD: ${MYSQL_ALLOW_EMPTY_PASSWORD}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
@@ -56,9 +165,11 @@ services:
     tty: true
     command: mysqld --sql_mode=""
     volumes:
+      - "${VOLUMES_ROOT}/www:/var/www/html"
       - "${VOLUMES_ROOT}/services/mysql/8.0/conf.d/my.cnf:/etc/mysql/conf.d/my.cnf"
       - "${VOLUMES_ROOT}/log/mysql/8.0:/var/log/mysql"
       - "${VOLUMES_ROOT}/data/mysql/8.0:/var/lib/mysql"
+    working_dir: "/var/www/html"
     environment: 
       MYSQL_ALLOW_EMPTY_PASSWORD: ${MYSQL_ALLOW_EMPTY_PASSWORD}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
@@ -73,59 +184,16 @@ services:
     restart: always
     tty: true
     volumes:
+      - "${VOLUMES_ROOT}/www:/var/www/html"
       - "${VOLUMES_ROOT}/log/mariadb/10.2.10:/var/log/mysql"
       - "${VOLUMES_ROOT}/data/mariadb/10.2.10:/var/lib/mysql"
+    working_dir: "/var/www/html"
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: ${MYSQL_ALLOW_EMPTY_PASSWORD}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_RANDOM_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     ports: 
       - "${MARIADB_PORT}:3306"
-    networks:
-      - www
-
-  php56:
-    build:
-      context: .
-      dockerfile: ${VOLUMES_ROOT}/services/php/5.6/dockerfile/Dockerfile
-    volumes:
-      - "${VOLUMES_ROOT}/services/php/5.6/conf.d/php.ini:/usr/local/etc/php/conf.d/php.ini"
-      - "${VOLUMES_ROOT}/www:/var/www/html"
-      - "${VOLUMES_ROOT}/log/php/5.6:/var/log/php"
-    environment: 
-      HOST: ${HOST}
-      LOG_ROOT: /var/log/php
-      TZ: ${TZ}
-    networks:
-      - www
-
-  php71:
-    build:
-      context: .
-      dockerfile: ${VOLUMES_ROOT}/services/php/7.1/dockerfile/Dockerfile
-    volumes:
-      - "${VOLUMES_ROOT}/services/php/7.1/conf.d/php.ini:/usr/local/etc/php/conf.d/php.ini"
-      - "${VOLUMES_ROOT}/www:/var/www/html"
-      - "${VOLUMES_ROOT}/log/php/7.1:/var/log/php"
-    environment: 
-      HOST: ${HOST}
-      LOG_ROOT: /var/log/php
-      TZ: ${TZ}
-    networks:
-      - www
-
-  php74:
-    build:
-      context: .
-      dockerfile: ${VOLUMES_ROOT}/services/php/7.4/dockerfile/Dockerfile
-    volumes:
-      - "${VOLUMES_ROOT}/services/php/7.4/conf.d/php.ini:/usr/local/etc/php/conf.d/php.ini"
-      - "${VOLUMES_ROOT}/www:/var/www/html"
-      - "${VOLUMES_ROOT}/log/php/7.4:/var/log/php"
-    environment: 
-      HOST: ${HOST}
-      LOG_ROOT: /var/log/php
-      TZ: ${TZ}
     networks:
       - www
 
@@ -150,6 +218,7 @@ services:
     depends_on:
       - mysql57
       - mysql80
+      - mariadb
   
   phpredisadmin:
     image: erikdubbelboer/phpredisadmin

@@ -21,7 +21,7 @@ RUN apk add --update \
         imagemagick \
         libtool \
         $PHPIZE_DEPS \
-    && pecl install xdebug swoole redis imagick \
+    && pecl install xdebug-3.1.6 swoole-4.8.13 redis imagick \
     && docker-php-ext-install pdo pdo_mysql zip exif \ 
     && docker-php-ext-enable xdebug swoole redis imagick \
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
@@ -29,10 +29,9 @@ RUN apk add --update \
       --with-freetype=/usr/include/ \
       --with-jpeg=/usr/include/ \
     && docker-php-ext-install -j$(nproc) gd \
-    && docker-php-ext-enable gd \
     && apk del --no-cache \
       freetype-dev \
       libjpeg-turbo-dev \
       libpng-dev \
     && rm -rf /tmp/*
-WORKDIR /var/www/html/7.4
+WORKDIR /var/www/html

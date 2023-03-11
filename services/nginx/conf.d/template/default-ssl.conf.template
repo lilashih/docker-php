@@ -1,14 +1,16 @@
 server {
-    listen 711 ssl;
+    listen 443 ssl;
     server_name localhost;
-    
+
+    set $root_path '/var/www/html';
+    root $root_path;
+    index index.php;
+
     ssl_certificate /etc/nginx/ssl/ssl.csr;
     ssl_certificate_key /etc/nginx/ssl/ssl.key;
 
-    index index.php index.html;
     error_log ${LOG_ROOT}/error-default.log;
     access_log ${LOG_ROOT}/access-default.log;
-    root /var/www/html/7.1;
 
     location / {
         try_files $uri $uri/ /index.php?$query_string;
@@ -17,34 +19,7 @@ server {
     location ~ \.php$ {
         try_files $uri = 404;
         fastcgi_split_path_info ^(.+\.php)(/.+)$;
-        fastcgi_pass php71:9000;
-        fastcgi_index index.php;
-        include fastcgi_params;
-        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-        fastcgi_param PATH_INFO $fastcgi_path_info;
-    }
-}
-
-server {
-    listen 744 ssl;
-    server_name localhost;
-    
-    ssl_certificate /etc/nginx/ssl/ssl.csr;
-    ssl_certificate_key /etc/nginx/ssl/ssl.key;
-
-    index index.php index.html;
-    error_log ${LOG_ROOT}/error-default.log;
-    access_log ${LOG_ROOT}/access-default.log;
-    root /var/www/html/7.4;
-
-    location / {
-        try_files $uri $uri/ /index.php?$query_string;
-    }
-
-    location ~ \.php$ {
-        try_files $uri = 404;
-        fastcgi_split_path_info ^(.+\.php)(/.+)$;
-        fastcgi_pass php74:9000;
+        fastcgi_pass php82:9000;
         fastcgi_index index.php;
         include fastcgi_params;
         fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;

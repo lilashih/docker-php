@@ -1,5 +1,10 @@
 *
 !.gitignore
-!default.conf.template
+
+!phpinfo-site.conf.template
+!phpinfo-ssl.conf.template
+!phpinfo-swoole.conf.template
+
+!default-site.conf.template
 !default-ssl.conf.template
-!swoole.conf.template
+!default-swoole.conf.template
