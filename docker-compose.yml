@@ -15,13 +15,13 @@ services:
     environment:
       LOG_ROOT: /var/log/nginx
     ports:
-      - "81:81"
-      - "8143:8143"
-      - "7001:7001"
-      - "82:82"
-      - "443:443"
-      - "847:847"
-      - "8000-8030:8000-8030"
+      - "${PHPINFO_PORT}:1001"
+      - "${PHPINFO_SSL_PORT}:1002"
+      - "${PHPINFO_SWOOLE_PORT}:1003"
+      - "${DEFAULT_SITE_PORT}:1011"
+      - "${DEFAULT_SITE_SSL_PORT}:1012"
+      - "${DEFAULT_SITE_SWOOLE_PORT}:1013"
+      - "8000-8040:8000-8040"
     depends_on:
       - php56
       - php71
@@ -37,6 +37,33 @@ services:
     networks:
       - www
   
+  supervisor:
+    build:
+      context: .
+      dockerfile: ${VOLUMES_ROOT}/services/supervisor/dockerfile/Dockerfile
+    tty: true
+    command: ["supervisord", "-c", "/etc/supervisor/supervisord.conf"]
+    volumes: 
+      - "${VOLUMES_ROOT}/www:/var/www/html"
+      - "${VOLUMES_ROOT}/services/supervisor/conf.d:/etc/supervisor/conf.d"
+      - "${VOLUMES_ROOT}/log/supervisor:/var/log/supervisor"
+    ports:
+      - "${SUPERVISOR_PORT}:1040"
+    depends_on:
+      - php56
+      - php71
+      - php74
+      - php80
+      - php81
+      - php82
+      - mysql57
+      - mysql80
+      - mariadb
+      - redis
+      - golang
+    networks:
+      - www
+
   golang:
     build:
       context: .
@@ -46,6 +73,8 @@ services:
       - "${VOLUMES_ROOT}/www:/var/www/html"
     environment: 
       TZ: ${TZ}
+    ports:
+      - "7000-7030:7000-7030"
     networks:
       - www
 
@@ -88,6 +117,7 @@ services:
       - "${VOLUMES_ROOT}/services/php/7.4/conf.d/php.ini:/usr/local/etc/php/conf.d/php.ini"
       - "${VOLUMES_ROOT}/log/php/7.4:/var/log/php"
     environment: 
+      CHOKIDAR_USEPOLLING: 1
       HOST: ${HOST}
       LOG_ROOT: /var/log/php
       TZ: ${TZ}
@@ -103,6 +133,7 @@ services:
       - "${VOLUMES_ROOT}/services/php/8.0/conf.d/php.ini:/usr/local/etc/php/conf.d/php.ini"
       - "${VOLUMES_ROOT}/log/php/8.0:/var/log/php"
     environment: 
+      CHOKIDAR_USEPOLLING: 1
       HOST: ${HOST}
       LOG_ROOT: /var/log/php
       TZ: ${TZ}
@@ -118,6 +149,7 @@ services:
       - "${VOLUMES_ROOT}/services/php/8.1/conf.d/php.ini:/usr/local/etc/php/conf.d/php.ini"
       - "${VOLUMES_ROOT}/log/php/8.1:/var/log/php"
     environment: 
+      CHOKIDAR_USEPOLLING: 1
       HOST: ${HOST}
       LOG_ROOT: /var/log/php
       TZ: ${TZ}
@@ -133,6 +165,7 @@ services:
       - "${VOLUMES_ROOT}/services/php/8.2/conf.d/php.ini:/usr/local/etc/php/conf.d/php.ini"
       - "${VOLUMES_ROOT}/log/php/8.2:/var/log/php"
     environment: 
+      CHOKIDAR_USEPOLLING: 1
       HOST: ${HOST}
       LOG_ROOT: /var/log/php
       TZ: ${TZ}
@@ -143,7 +176,7 @@ services:
     image: mysql:5.7
     restart: always
     tty: true
-    command: mysqld --sql_mode=""
+    command: ["sh", "-c", "chmod -R 644 /etc/mysql/conf.d/*.cnf && /entrypoint.sh mysqld"]
     volumes:
       - "${VOLUMES_ROOT}/www:/var/www/html"
       - "${VOLUMES_ROOT}/services/mysql/5.7/conf.d/my.cnf:/etc/mysql/conf.d/my.cnf"
@@ -163,7 +196,7 @@ services:
     image: mysql:8.0
     restart: always
     tty: true
-    command: mysqld --sql_mode=""
+    command: ["sh", "-c", "chmod -R 644 /etc/mysql/conf.d/*.cnf && /entrypoint.sh mysqld"]
     volumes:
       - "${VOLUMES_ROOT}/www:/var/www/html"
       - "${VOLUMES_ROOT}/services/mysql/8.0/conf.d/my.cnf:/etc/mysql/conf.d/my.cnf"
@@ -183,8 +216,10 @@ services:
     image: mariadb:10.2.10
     restart: always
     tty: true
+    command: ["sh", "-c", "chmod -R 644 /etc/mysql/conf.d/*.cnf && /docker-entrypoint.sh mysqld"]
     volumes:
       - "${VOLUMES_ROOT}/www:/var/www/html"
+      - "${VOLUMES_ROOT}/services/mariadb/10.2.10/conf.d/my.cnf:/etc/mysql/conf.d/my.cnf"
       - "${VOLUMES_ROOT}/log/mariadb/10.2.10:/var/log/mysql"
       - "${VOLUMES_ROOT}/data/mariadb/10.2.10:/var/lib/mysql"
     working_dir: "/var/www/html"
@@ -231,3 +266,22 @@ services:
       - redis
     networks:
       - www
+
+  selenium-hub:
+    image: selenium/hub
+    ports:
+      - "4442:4442"
+      - "4443:4443"
+      - "4444:4444"
+
+  chrome:
+      image: selenium/node-chrome
+      shm_size: 2gb
+      environment:
+        - SE_EVENT_BUS_HOST=selenium-hub
+        - SE_EVENT_BUS_PUBLISH_PORT=4442
+        - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+      ports:
+        - "7900:7900"
+      depends_on:
+        - selenium-hub

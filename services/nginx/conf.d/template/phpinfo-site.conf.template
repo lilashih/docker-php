@@ -1,12 +1,14 @@
 server {
-    listen 81;
+    listen 1001;
     server_name localhost;
 
     set $root_path '/var/www/html';
     root $root_path;
 
-    error_log ${LOG_ROOT}/error-default.log;
-    access_log ${LOG_ROOT}/access-default.log;
+    error_log ${LOG_ROOT}/error-phpinfo.log;
+    access_log ${LOG_ROOT}/access-phpinfo.log;
+
+    client_max_body_size 60M;
 
     location ^~ /phpinfo/5.6 {
         alias $root_path;
@@ -42,6 +44,26 @@ server {
             }
 
             fastcgi_pass php71:9000;
+            fastcgi_index index.php;
+            fastcgi_param SCRIPT_FILENAME $request_filename;
+            include fastcgi_params;
+        }
+    }
+
+    location ^~ /phpinfo/7.4 {
+        alias $root_path;
+        index index.php;
+
+        if (!-e $request_filename) {
+            rewrite ^ /phpinfo/7.4/ last;
+        }
+
+        location ~ \.php$ {
+            if (!-f $request_filename) {
+                return 404;
+            }
+
+            fastcgi_pass php74:9000;
             fastcgi_index index.php;
             fastcgi_param SCRIPT_FILENAME $request_filename;
             include fastcgi_params;

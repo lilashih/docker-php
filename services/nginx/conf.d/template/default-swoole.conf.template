@@ -1,12 +1,12 @@
 server {
-    listen 847 ssl;
+    listen 1013 ssl;
     server_name localhost;
 
     ssl_certificate /etc/nginx/ssl/ssl.csr;
     ssl_certificate_key /etc/nginx/ssl/ssl.key;
     
-    error_log  ${LOG_ROOT}/error-swoole.log;
-    access_log ${LOG_ROOT}/access-swoole.log;
+    error_log  ${LOG_ROOT}/error-default.log;
+    access_log ${LOG_ROOT}/access-default.log;
 
     location / {
         if (!-e $request_filename) {

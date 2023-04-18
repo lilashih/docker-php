@@ -8,3 +8,6 @@
 !default-site.conf.template
 !default-ssl.conf.template
 !default-swoole.conf.template
+
+!default-laravel.conf.template
+!default-octane.conf.template

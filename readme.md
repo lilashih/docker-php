@@ -74,22 +74,34 @@ docker-compose up -d
 
 | File                         | URL                             |
 | ---------------------------- | ------------------------------- |
-| phpinfo-site.conf.template   | http://127.0.0.1:81/phpinfo/5.6 <br/> http://127.0.0.1:81/phpinfo/7.1 <br/> http://127.0.0.1:81/phpinfo/7.4 <br/> http://127.0.0.1:81/phpinfo/8.0 <br/> http://127.0.0.1:81/phpinfo/8.1 <br/> http://127.0.0.1:81/phpinfo/8.2 |
-| phpinfo-ssl.conf.template    | https://127.0.0.1:8143/phpinfo/5.6 <br/> https://127.0.0.1:8143/phpinfo/7.1 <br/> https://127.0.0.1:8143/phpinfo/7.4 <br/> https://127.0.0.1:8143/phpinfo/8.0 <br/> https://127.0.0.1:8143/phpinfo/8.1 <br/> https://127.0.0.1:8143/phpinfo/8.2 |
-| default-site.conf.template   | http://127.0.0.1:82            |
-| default-ssl.conf.template    | https://127.0.0.1:443          |
-| phpinfo-swoole.conf.template | https://127.0.0.1:7001/7.4 <br/> https://127.0.0.1:7001/8.0 <br/> https://127.0.0.1:7001/8.1 <br/> https://127.0.0.1:7001/8.2 |
-| default-swoole.conf.template | https://127.0.0.1:847 |
+| phpinfo-site.conf.template   | http://127.0.0.1:1001/phpinfo/5.6 <br/> http://127.0.0.1:1001/phpinfo/7.1 <br/> http://127.0.0.1:1001/phpinfo/7.4 <br/> http://127.0.0.1:1001/phpinfo/8.0 <br/> http://127.0.0.1:1001/phpinfo/8.1 <br/> http://127.0.0.1:1001/phpinfo/8.2 |
+| phpinfo-ssl.conf.template    | https://127.0.0.1:1002/phpinfo/5.6 <br/> https://127.0.0.1:1002/phpinfo/7.1 <br/> https://127.0.0.1:1002/phpinfo/7.4 <br/> https://127.0.0.1:1002/phpinfo/8.0 <br/> https://127.0.0.1:1002/phpinfo/8.1 <br/> https://127.0.0.1:1002/phpinfo/8.2 |
+| default-site.conf.template   | http://127.0.0.1:1011            |
+| default-ssl.conf.template    | https://127.0.0.1:1012           |
+| phpinfo-swoole.conf.template | https://127.0.0.1:1003/7.4 <br/> https://127.0.0.1:1003/8.0 <br/> https://127.0.0.1:1003/8.1 <br/> https://127.0.0.1:1003/8.2 |
+| default-swoole.conf.template | https://127.0.0.1:1013           |
+
+#### Environment variables
+
+| variable                 | default |
+| ------------------------ | ------- |
+| PHPINFO_PORT             | 1001    |
+| PHPINFO_SSL_PORT         | 1002    |
+| PHPINFO_SWOOLE_PORT      | 1003    |
+| DEFAULT_SITE_PORT        | 1011    |
+| DEFAULT_SITE_SSL_PORT    | 1012    |
+| DEFAULT_SITE_SWOOLE_PORT | 1013    |
+
 
 ### PHP
-| Version | Swoole   | ImageMagick   |
-| ------- | :------: | :-----------: |
-| 5.6     |          |               |
-| 7.1     |          | v             |
-| 7.4     | v        | v             |
-| 8.0     | v        | v             |
-| 8.1     | v        | v             |
-| 8.2     | v        | v             |
+| Version | Swoole   | ImageMagick   | Opache |
+| ------- | :------: | :-----------: | :----: |
+| 5.6     |          |               |        |
+| 7.1     |          | v             |        |
+| 7.4     | v        | v             |        |
+| 8.0     | v        | v             |        |
+| 8.1     | v        | v             |        |
+| 8.2     | v        | v             | v      |
 
 #### Enter Container
 ```shell
@@ -123,6 +135,22 @@ docker-compose exec php82 /bin/sh
     sh test.sh
     ```
 
+
+
+### supervisor
+#### Environment variables
+
+| configuration | variable          | default |
+| ------------- | ----------------- | ------- |
+| web ui port   | SUPERVISOR_PORT   | 1040    |
+
+#### Enter Container
+```shell
+docker-compose exec supervisor bash
+```
+
+
+
 ### Mysql
 | Version | phpmyadmin |
 | ------- | ---------- |
@@ -142,6 +170,7 @@ You can choose any version of mysql you want. And the working directory is [www]
 
 ```shell
 docker-compose exec mysql57 bash
+mysql -u root -p
 ```
 
 Another way to connect the mysql service without entering the container is using the mysql client command.

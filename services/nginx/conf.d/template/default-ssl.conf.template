@@ -1,5 +1,5 @@
 server {
-    listen 443 ssl;
+    listen 1012 ssl;
     server_name localhost;
 
     set $root_path '/var/www/html';
@@ -11,6 +11,8 @@ server {
 
     error_log ${LOG_ROOT}/error-default.log;
     access_log ${LOG_ROOT}/access-default.log;
+
+    client_max_body_size 60M;
 
     location / {
         try_files $uri $uri/ /index.php?$query_string;
@@ -24,5 +26,9 @@ server {
         include fastcgi_params;
         fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
         fastcgi_param PATH_INFO $fastcgi_path_info;
+    }
+     
+    location ~ /\.ht {
+        deny all;
     }
 }
