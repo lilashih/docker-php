@@ -1,0 +1,16 @@
+{
+    "name": "lilashih/default",
+    "autoload": {
+        "psr-4": {
+            "Lilashih\\Default\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "lilashih"
+        }
+    ],
+    "require": {
+        "amnuts/opcache-gui": "^3.5"
+    }
+}

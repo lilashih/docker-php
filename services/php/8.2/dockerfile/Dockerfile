@@ -23,7 +23,7 @@ RUN apk add --update \
         $PHPIZE_DEPS \
     && pecl install xdebug swoole redis imagick \
     && docker-php-ext-install pdo pdo_mysql zip exif opcache \ 
-    && docker-php-ext-enable xdebug swoole redis imagick \
+    && docker-php-ext-enable xdebug swoole redis imagick opcache \
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
     && docker-php-ext-configure gd \
       --with-freetype=/usr/include/ \

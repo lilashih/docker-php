@@ -9,6 +9,9 @@ Copy the .env.example file to .env.
 ```shell
 docker-compose build
 docker-compose up -d
+
+# Build the specific image
+docker-compose build php71
 ```
 
 ### Start the services
@@ -74,12 +77,12 @@ docker-compose up -d
 
 | File                         | URL                             |
 | ---------------------------- | ------------------------------- |
-| phpinfo-site.conf.template   | http://127.0.0.1:1001/phpinfo/5.6 <br/> http://127.0.0.1:1001/phpinfo/7.1 <br/> http://127.0.0.1:1001/phpinfo/7.4 <br/> http://127.0.0.1:1001/phpinfo/8.0 <br/> http://127.0.0.1:1001/phpinfo/8.1 <br/> http://127.0.0.1:1001/phpinfo/8.2 |
-| phpinfo-ssl.conf.template    | https://127.0.0.1:1002/phpinfo/5.6 <br/> https://127.0.0.1:1002/phpinfo/7.1 <br/> https://127.0.0.1:1002/phpinfo/7.4 <br/> https://127.0.0.1:1002/phpinfo/8.0 <br/> https://127.0.0.1:1002/phpinfo/8.1 <br/> https://127.0.0.1:1002/phpinfo/8.2 |
-| default-site.conf.template   | http://127.0.0.1:1011            |
-| default-ssl.conf.template    | https://127.0.0.1:1012           |
-| phpinfo-swoole.conf.template | https://127.0.0.1:1003/7.4 <br/> https://127.0.0.1:1003/8.0 <br/> https://127.0.0.1:1003/8.1 <br/> https://127.0.0.1:1003/8.2 |
-| default-swoole.conf.template | https://127.0.0.1:1013           |
+| default-site.conf.template   | http://127.0.0.1:1001/phpinfo/5.6 <br/> http://127.0.0.1:1001/phpinfo/7.1 <br/> http://127.0.0.1:1001/phpinfo/7.4 <br/> http://127.0.0.1:1001/phpinfo/8.0 <br/> http://127.0.0.1:1001/phpinfo/8.1 <br/> http://127.0.0.1:1001/phpinfo/8.2 |
+| default-ssl.conf.template    | https://127.0.0.1:1002/phpinfo/5.6 <br/> https://127.0.0.1:1002/phpinfo/7.1 <br/> https://127.0.0.1:1002/phpinfo/7.4 <br/> https://127.0.0.1:1002/phpinfo/8.0 <br/> https://127.0.0.1:1002/phpinfo/8.1 <br/> https://127.0.0.1:1002/phpinfo/8.2 |
+| default-swoole.conf.template | https://127.0.0.1:1003/7.4 <br/> https://127.0.0.1:1003/8.0 <br/> https://127.0.0.1:1003/8.1 <br/> https://127.0.0.1:1003/8.2 |
+| project-site.conf.template   | http://127.0.0.1:1011            |
+| project-ssl.conf.template    | https://127.0.0.1:1012           |
+| project-swoole.conf.template | https://127.0.0.1:1013           |
 
 #### Environment variables
 
@@ -98,9 +101,9 @@ docker-compose up -d
 | ------- | :------: | :-----------: | :----: |
 | 5.6     |          |               |        |
 | 7.1     |          | v             |        |
-| 7.4     | v        | v             |        |
-| 8.0     | v        | v             |        |
-| 8.1     | v        | v             |        |
+| 7.4     | v        | v             | v      |
+| 8.0     | v        | v             | v      |
+| 8.1     | v        | v             | v      |
 | 8.2     | v        | v             | v      |
 
 #### Enter Container
@@ -117,14 +120,14 @@ docker-compose exec php82 /bin/sh
     ```shell
     composer create-project --prefer-dist laravel/laravel blog
     ```
-2. Create the [conf file](services\nginx\conf.d\template\default-site.conf.template) in nginx.
+2. Create the [conf file](services\nginx\conf.d\template\project-laravel.conf.template) in nginx.
 
 #### Swoole
-1. After entering the php container, run the swoole file.
+1. After entering the php container, run the [swoole.php](www\default\public\swoole.php).
     ```shell
     php swoole.php
     ```
-2. Create the [conf file](services\nginx\conf.d\template\default-swoole.conf.template) in nginx.
+2. Create the [conf file](services\nginx\conf.d\template\project-swoole.conf.template) in nginx.
 
 
 #### ImageMagick

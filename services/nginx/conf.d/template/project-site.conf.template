@@ -1,0 +1,31 @@
+server {
+    listen 1011;
+    server_name localhost;
+
+    set $root_path '/var/www/html';
+    root $root_path;
+    index index.php;
+
+    error_log ${LOG_ROOT}/default_error.log;
+    access_log ${LOG_ROOT}/default_access.log;
+
+    client_max_body_size 60M;
+
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    location ~ \.php$ {
+        try_files $uri = 404;
+        fastcgi_split_path_info ^(.+\.php)(/.+)$;
+        fastcgi_pass php82:9000;
+        fastcgi_index index.php;
+        include fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_param PATH_INFO $fastcgi_path_info;
+    }
+
+    location ~ /\.ht {
+        deny all;
+    }
+}

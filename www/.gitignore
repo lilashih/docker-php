@@ -1,6 +1,5 @@
 *
 !.gitignore
-!index.php
-!redis.php
-!swoole.php
+!.vscode/
+!default/
 !imagick/

@@ -1,0 +1,81 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "87d9829453ea9edaac8f66e53fb7b569",
+    "packages": [
+        {
+            "name": "amnuts/opcache-gui",
+            "version": "3.5.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/amnuts/opcache-gui.git",
+                "reference": "c4af1edefef3494dd483de5b168af4f08179fda5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/amnuts/opcache-gui/zipball/c4af1edefef3494dd483de5b168af4f08179fda5",
+                "reference": "c4af1edefef3494dd483de5b168af4f08179fda5",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "ext-zend-opcache": "*",
+                "php": ">=7.1.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Amnuts\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Andrew Collington",
+                    "email": "andy@amnuts.com",
+                    "homepage": "https://blog.amnuts.com/",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Contributors",
+                    "homepage": "https://github.com/amnuts/opcache-gui/graphs/contributors"
+                }
+            ],
+            "description": "A clean, effective and responsive interface for Zend OPcache, with real(ish)-time monitoring, filtering and the ability to invalidate files",
+            "keywords": [
+                "Opcache",
+                "cache",
+                "gui",
+                "interface",
+                "opcodes"
+            ],
+            "support": {
+                "email": "andy@amnuts.com",
+                "issues": "https://github.com/amnuts/opcache-gui/issues",
+                "source": "https://github.com/amnuts/opcache-gui/tree/3.5.1"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/amnuts",
+                    "type": "github"
+                }
+            ],
+            "time": "2023-08-25T18:02:59+00:00"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": [],
+    "plugin-api-version": "2.6.0"
+}

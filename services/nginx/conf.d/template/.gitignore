@@ -1,13 +1,13 @@
 *
 !.gitignore
 
-!phpinfo-site.conf.template
-!phpinfo-ssl.conf.template
-!phpinfo-swoole.conf.template
-
 !default-site.conf.template
 !default-ssl.conf.template
 !default-swoole.conf.template
 
-!default-laravel.conf.template
-!default-octane.conf.template
+!project-site.conf.template
+!project-ssl.conf.template
+!project-swoole.conf.template
+
+!project-laravel.conf.template
+!project-octane.conf.template

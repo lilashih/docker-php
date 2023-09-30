@@ -1,14 +1,32 @@
 server {
-    listen 1013 ssl;
+    listen 1003 ssl;
     server_name localhost;
 
     ssl_certificate /etc/nginx/ssl/ssl.csr;
     ssl_certificate_key /etc/nginx/ssl/ssl.key;
     
-    error_log  ${LOG_ROOT}/error-default.log;
-    access_log ${LOG_ROOT}/access-default.log;
+    error_log  ${LOG_ROOT}/default_swoole_error.log;
+    access_log ${LOG_ROOT}/default_swoole_access.log;
 
-    location / {
+    location ^~ /7.4 {
+        if (!-e $request_filename) {
+            proxy_pass http://php74:7000;
+        }
+    }
+
+    location ^~ /8.0 {
+        if (!-e $request_filename) {
+            proxy_pass http://php80:7000;
+        }
+    }
+
+    location ^~ /8.1 {
+        if (!-e $request_filename) {
+            proxy_pass http://php81:7000;
+        }
+    }
+
+    location ^~ /8.2 {
         if (!-e $request_filename) {
             proxy_pass http://php82:7000;
         }
