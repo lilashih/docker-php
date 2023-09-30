@@ -77,8 +77,8 @@ docker-compose up -d
 
 | File                         | URL                             |
 | ---------------------------- | ------------------------------- |
-| default-site.conf.template   | http://127.0.0.1:1001/phpinfo/5.6 <br/> http://127.0.0.1:1001/phpinfo/7.1 <br/> http://127.0.0.1:1001/phpinfo/7.4 <br/> http://127.0.0.1:1001/phpinfo/8.0 <br/> http://127.0.0.1:1001/phpinfo/8.1 <br/> http://127.0.0.1:1001/phpinfo/8.2 |
-| default-ssl.conf.template    | https://127.0.0.1:1002/phpinfo/5.6 <br/> https://127.0.0.1:1002/phpinfo/7.1 <br/> https://127.0.0.1:1002/phpinfo/7.4 <br/> https://127.0.0.1:1002/phpinfo/8.0 <br/> https://127.0.0.1:1002/phpinfo/8.1 <br/> https://127.0.0.1:1002/phpinfo/8.2 |
+| default-site.conf.template   | http://127.0.0.1:1001/phpinfo <br/> http://127.0.0.1:1001/opcache |
+| default-ssl.conf.template    | https://127.0.0.1:1002/phpinfo <br/> http://127.0.0.1:1002/opcache |
 | default-swoole.conf.template | https://127.0.0.1:1003/7.4 <br/> https://127.0.0.1:1003/8.0 <br/> https://127.0.0.1:1003/8.1 <br/> https://127.0.0.1:1003/8.2 |
 | project-site.conf.template   | http://127.0.0.1:1011            |
 | project-ssl.conf.template    | https://127.0.0.1:1012           |

@@ -10,6 +10,18 @@ server {
 
     client_max_body_size 60M;
 
+    location ^~ /phpinfo {
+        if (!-e $request_filename) {
+            rewrite ^ /phpinfo/5.6/ last;
+        }
+    }
+
+    location ^~ /opcache {
+        if (!-e $request_filename) {
+            rewrite ^ /opcache/7.4/ last;
+        }
+    }
+
     location ^~ /phpinfo/5.6 {
         alias $root_path;
         index phpinfo.php;
