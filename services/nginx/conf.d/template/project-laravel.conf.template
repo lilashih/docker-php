@@ -5,8 +5,8 @@ server {
     root /var/www/html/laravel/public;
     index index.php index.html;
 
-    error_log  ${LOG_ROOT}/laravel_error.log;
-    access_log ${LOG_ROOT}/laravel_access.log;
+    error_log  ${LOG_ROOT}/laravel.error.log;
+    access_log ${LOG_ROOT}/laravel.access.log;
 
     location / {
         try_files $uri $uri/ /index.php$is_args$args;

@@ -6,8 +6,8 @@ server {
     root $root_path;
     index index.php;
 
-    error_log ${LOG_ROOT}/default_error.log;
-    access_log ${LOG_ROOT}/default_access.log;
+    error_log ${LOG_ROOT}/site.error.log;
+    access_log ${LOG_ROOT}/site.access.log;
 
     client_max_body_size 60M;
 

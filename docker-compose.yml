@@ -8,10 +8,10 @@ services:
     restart: always
     image: nginx:alpine
     volumes: 
-      - "${VOLUMES_ROOT}/www:/var/www/html"
-      - "${VOLUMES_ROOT}/services/nginx/conf.d/template:/etc/nginx/templates"
-      - "${VOLUMES_ROOT}/services/nginx/ssl:/etc/nginx/ssl"
-      - "${VOLUMES_ROOT}/log/nginx:/var/log/nginx"
+      - "${VOLUME_ROOT}/www:/var/www/html"
+      - "${VOLUME_ROOT}/services/nginx/conf.d/template:/etc/nginx/templates"
+      - "${VOLUME_ROOT}/services/nginx/ssl:/etc/nginx/ssl"
+      - "${VOLUME_ROOT}/log/nginx:/var/log/nginx"
     environment:
       LOG_ROOT: /var/log/nginx
     ports:
@@ -40,13 +40,13 @@ services:
   supervisor:
     build:
       context: .
-      dockerfile: ${VOLUMES_ROOT}/services/supervisor/dockerfile/Dockerfile
+      dockerfile: ${VOLUME_ROOT}/services/supervisor/dockerfile/Dockerfile
     tty: true
     command: ["supervisord", "-c", "/etc/supervisor/supervisord.conf"]
     volumes: 
-      - "${VOLUMES_ROOT}/www:/var/www/html"
-      - "${VOLUMES_ROOT}/services/supervisor/conf.d:/etc/supervisor/conf.d"
-      - "${VOLUMES_ROOT}/log/supervisor:/var/log/supervisor"
+      - "${VOLUME_ROOT}/www:/var/www/html"
+      - "${VOLUME_ROOT}/services/supervisor/conf.d:/etc/supervisor/conf.d"
+      - "${VOLUME_ROOT}/log/supervisor:/var/log/supervisor"
     ports:
       - "${SUPERVISOR_PORT}:1040"
     depends_on:
@@ -67,10 +67,10 @@ services:
   golang:
     build:
       context: .
-      dockerfile: ${VOLUMES_ROOT}/services/golang/dockerfile/Dockerfile
+      dockerfile: ${VOLUME_ROOT}/services/golang/dockerfile/Dockerfile
     tty: true
     volumes:
-      - "${VOLUMES_ROOT}/www:/var/www/html"
+      - "${VOLUME_ROOT}/www:/var/www/html"
     environment: 
       TZ: ${TZ}
     ports:
@@ -81,11 +81,11 @@ services:
   php56:
     build:
       context: .
-      dockerfile: ${VOLUMES_ROOT}/services/php/5.6/dockerfile/Dockerfile
+      dockerfile: ${VOLUME_ROOT}/services/php/5.6/dockerfile/Dockerfile
     volumes:
-      - "${VOLUMES_ROOT}/www:/var/www/html"
-      - "${VOLUMES_ROOT}/services/php/5.6/conf.d/php.ini:/usr/local/etc/php/conf.d/php.ini"
-      - "${VOLUMES_ROOT}/log/php/5.6:/var/log/php"
+      - "${VOLUME_ROOT}/www:/var/www/html"
+      - "${VOLUME_ROOT}/services/php/5.6/conf.d/php.ini:/usr/local/etc/php/conf.d/php.ini"
+      - "${VOLUME_ROOT}/log/php/5.6:/var/log/php"
     environment: 
       HOST: ${HOST}
       LOG_ROOT: /var/log/php
@@ -96,11 +96,11 @@ services:
   php71:
     build:
       context: .
-      dockerfile: ${VOLUMES_ROOT}/services/php/7.1/dockerfile/Dockerfile
+      dockerfile: ${VOLUME_ROOT}/services/php/7.1/dockerfile/Dockerfile
     volumes:
-      - "${VOLUMES_ROOT}/www:/var/www/html"
-      - "${VOLUMES_ROOT}/services/php/7.1/conf.d/php.ini:/usr/local/etc/php/conf.d/php.ini"
-      - "${VOLUMES_ROOT}/log/php/7.1:/var/log/php"
+      - "${VOLUME_ROOT}/www:/var/www/html"
+      - "${VOLUME_ROOT}/services/php/7.1/conf.d/php.ini:/usr/local/etc/php/conf.d/php.ini"
+      - "${VOLUME_ROOT}/log/php/7.1:/var/log/php"
     environment: 
       HOST: ${HOST}
       LOG_ROOT: /var/log/php
@@ -111,11 +111,11 @@ services:
   php74:
     build:
       context: .
-      dockerfile: ${VOLUMES_ROOT}/services/php/7.4/dockerfile/Dockerfile
+      dockerfile: ${VOLUME_ROOT}/services/php/7.4/dockerfile/Dockerfile
     volumes:
-      - "${VOLUMES_ROOT}/www:/var/www/html"
-      - "${VOLUMES_ROOT}/services/php/7.4/conf.d/php.ini:/usr/local/etc/php/conf.d/php.ini"
-      - "${VOLUMES_ROOT}/log/php/7.4:/var/log/php"
+      - "${VOLUME_ROOT}/www:/var/www/html"
+      - "${VOLUME_ROOT}/services/php/7.4/conf.d/php.ini:/usr/local/etc/php/conf.d/php.ini"
+      - "${VOLUME_ROOT}/log/php/7.4:/var/log/php"
     environment: 
       CHOKIDAR_USEPOLLING: 1
       HOST: ${HOST}
@@ -127,11 +127,11 @@ services:
   php80:
     build:
       context: .
-      dockerfile: ${VOLUMES_ROOT}/services/php/8.0/dockerfile/Dockerfile
+      dockerfile: ${VOLUME_ROOT}/services/php/8.0/dockerfile/Dockerfile
     volumes:
-      - "${VOLUMES_ROOT}/www:/var/www/html"
-      - "${VOLUMES_ROOT}/services/php/8.0/conf.d/php.ini:/usr/local/etc/php/conf.d/php.ini"
-      - "${VOLUMES_ROOT}/log/php/8.0:/var/log/php"
+      - "${VOLUME_ROOT}/www:/var/www/html"
+      - "${VOLUME_ROOT}/services/php/8.0/conf.d/php.ini:/usr/local/etc/php/conf.d/php.ini"
+      - "${VOLUME_ROOT}/log/php/8.0:/var/log/php"
     environment: 
       CHOKIDAR_USEPOLLING: 1
       HOST: ${HOST}
@@ -143,11 +143,11 @@ services:
   php81:
     build:
       context: .
-      dockerfile: ${VOLUMES_ROOT}/services/php/8.1/dockerfile/Dockerfile
+      dockerfile: ${VOLUME_ROOT}/services/php/8.1/dockerfile/Dockerfile
     volumes:
-      - "${VOLUMES_ROOT}/www:/var/www/html"
-      - "${VOLUMES_ROOT}/services/php/8.1/conf.d/php.ini:/usr/local/etc/php/conf.d/php.ini"
-      - "${VOLUMES_ROOT}/log/php/8.1:/var/log/php"
+      - "${VOLUME_ROOT}/www:/var/www/html"
+      - "${VOLUME_ROOT}/services/php/8.1/conf.d/php.ini:/usr/local/etc/php/conf.d/php.ini"
+      - "${VOLUME_ROOT}/log/php/8.1:/var/log/php"
     environment: 
       CHOKIDAR_USEPOLLING: 1
       HOST: ${HOST}
@@ -159,11 +159,11 @@ services:
   php82:
     build:
       context: .
-      dockerfile: ${VOLUMES_ROOT}/services/php/8.2/dockerfile/Dockerfile
+      dockerfile: ${VOLUME_ROOT}/services/php/8.2/dockerfile/Dockerfile
     volumes:
-      - "${VOLUMES_ROOT}/www:/var/www/html"
-      - "${VOLUMES_ROOT}/services/php/8.2/conf.d/php.ini:/usr/local/etc/php/conf.d/php.ini"
-      - "${VOLUMES_ROOT}/log/php/8.2:/var/log/php"
+      - "${VOLUME_ROOT}/www:/var/www/html"
+      - "${VOLUME_ROOT}/services/php/8.2/conf.d/php.ini:/usr/local/etc/php/conf.d/php.ini"
+      - "${VOLUME_ROOT}/log/php/8.2:/var/log/php"
     environment: 
       CHOKIDAR_USEPOLLING: 1
       HOST: ${HOST}
@@ -178,10 +178,10 @@ services:
     tty: true
     command: ["sh", "-c", "chmod -R 644 /etc/mysql/conf.d/*.cnf && /entrypoint.sh mysqld"]
     volumes:
-      - "${VOLUMES_ROOT}/www:/var/www/html"
-      - "${VOLUMES_ROOT}/services/mysql/5.7/conf.d/my.cnf:/etc/mysql/conf.d/my.cnf"
-      - "${VOLUMES_ROOT}/log/mysql/5.7:/var/log/mysql"
-      - "${VOLUMES_ROOT}/data/mysql/5.7:/var/lib/mysql"
+      - "${VOLUME_ROOT}/www:/var/www/html"
+      - "${VOLUME_ROOT}/services/mysql/5.7/conf.d/my.cnf:/etc/mysql/conf.d/my.cnf"
+      - "${VOLUME_ROOT}/log/mysql/5.7:/var/log/mysql"
+      - "${VOLUME_ROOT}/data/mysql/5.7:/var/lib/mysql"
     working_dir: "/var/www/html"
     environment: 
       MYSQL_ALLOW_EMPTY_PASSWORD: ${MYSQL_ALLOW_EMPTY_PASSWORD}
@@ -198,10 +198,10 @@ services:
     tty: true
     command: ["sh", "-c", "chmod -R 644 /etc/mysql/conf.d/*.cnf && /entrypoint.sh mysqld"]
     volumes:
-      - "${VOLUMES_ROOT}/www:/var/www/html"
-      - "${VOLUMES_ROOT}/services/mysql/8.0/conf.d/my.cnf:/etc/mysql/conf.d/my.cnf"
-      - "${VOLUMES_ROOT}/log/mysql/8.0:/var/log/mysql"
-      - "${VOLUMES_ROOT}/data/mysql/8.0:/var/lib/mysql"
+      - "${VOLUME_ROOT}/www:/var/www/html"
+      - "${VOLUME_ROOT}/services/mysql/8.0/conf.d/my.cnf:/etc/mysql/conf.d/my.cnf"
+      - "${VOLUME_ROOT}/log/mysql/8.0:/var/log/mysql"
+      - "${VOLUME_ROOT}/data/mysql/8.0:/var/lib/mysql"
     working_dir: "/var/www/html"
     environment: 
       MYSQL_ALLOW_EMPTY_PASSWORD: ${MYSQL_ALLOW_EMPTY_PASSWORD}
@@ -218,10 +218,10 @@ services:
     tty: true
     command: ["sh", "-c", "chmod -R 644 /etc/mysql/conf.d/*.cnf && /docker-entrypoint.sh mysqld"]
     volumes:
-      - "${VOLUMES_ROOT}/www:/var/www/html"
-      - "${VOLUMES_ROOT}/services/mariadb/10.2.10/conf.d/my.cnf:/etc/mysql/conf.d/my.cnf"
-      - "${VOLUMES_ROOT}/log/mariadb/10.2.10:/var/log/mysql"
-      - "${VOLUMES_ROOT}/data/mariadb/10.2.10:/var/lib/mysql"
+      - "${VOLUME_ROOT}/www:/var/www/html"
+      - "${VOLUME_ROOT}/services/mariadb/10.2.10/conf.d/my.cnf:/etc/mysql/conf.d/my.cnf"
+      - "${VOLUME_ROOT}/log/mariadb/10.2.10:/var/log/mysql"
+      - "${VOLUME_ROOT}/data/mariadb/10.2.10:/var/lib/mysql"
     working_dir: "/var/www/html"
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: ${MYSQL_ALLOW_EMPTY_PASSWORD}
@@ -235,8 +235,8 @@ services:
   redis:
     image: redis:alpine
     volumes:
-      - "${VOLUMES_ROOT}/services/redis/redis.conf:/usr/local/etc/redis/redis.conf"
-      - "${VOLUMES_ROOT}/log/redis:/var/log/redis"
+      - "${VOLUME_ROOT}/services/redis/redis.conf:/usr/local/etc/redis/redis.conf"
+      - "${VOLUME_ROOT}/log/redis:/var/log/redis"
     ports:
       - ${REDIS_PORT}:6379
     networks:

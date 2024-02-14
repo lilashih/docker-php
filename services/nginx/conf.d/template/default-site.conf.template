@@ -5,8 +5,8 @@ server {
     set $root_path '/var/www/html/default/public';
     root $root_path;
 
-    error_log ${LOG_ROOT}/default_error.log;
-    access_log ${LOG_ROOT}/default_access.log;
+    error_log ${LOG_ROOT}/default.error.log;
+    access_log ${LOG_ROOT}/default.access.log;
 
     client_max_body_size 60M;
 

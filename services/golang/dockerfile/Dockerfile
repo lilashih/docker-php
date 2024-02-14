@@ -1,4 +1,4 @@
-FROM ubuntu:latest
+FROM golang:latest
 
 RUN apt-get update \
     && apt-get -y install \
@@ -11,6 +11,5 @@ RUN apt-get update \
       libicu-dev \
       libcairo2-dev \
       libtesseract-dev \
-      golang-go \
       ca-certificates
 WORKDIR /var/www/html

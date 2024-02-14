@@ -12,6 +12,7 @@ docker-compose up -d
 
 # Build the specific image
 docker-compose build php71
+docker-compose build golang
 ```
 
 ### Start the services
@@ -80,9 +81,9 @@ docker-compose up -d
 | default-site.conf.template   | http://127.0.0.1:1001/phpinfo <br/> http://127.0.0.1:1001/opcache |
 | default-ssl.conf.template    | https://127.0.0.1:1002/phpinfo <br/> http://127.0.0.1:1002/opcache |
 | default-swoole.conf.template | https://127.0.0.1:1003/7.4 <br/> https://127.0.0.1:1003/8.0 <br/> https://127.0.0.1:1003/8.1 <br/> https://127.0.0.1:1003/8.2 |
-| project-site.conf.template   | http://127.0.0.1:1011            |
-| project-ssl.conf.template    | https://127.0.0.1:1012           |
-| project-swoole.conf.template | https://127.0.0.1:1013           |
+| project-site.conf.template   | http://127.0.0.1:1011           |
+| project-ssl.conf.template    | https://127.0.0.1:1012          |
+| project-swoole.conf.template | https://127.0.0.1:1013          |
 
 #### Environment variables
 
