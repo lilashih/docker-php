@@ -1,18 +1,16 @@
 FROM php:7.1-fpm-alpine
 
 RUN apk add --update \
-        libzip-dev \
         npm \
         git \
+        libzip-dev \
         freetype \
         libjpeg-turbo \
         libpng \
         freetype-dev \
         libjpeg-turbo-dev \
-        autoconf \
-        g++ \
-        make \
         openssl \
+        openssl-dev \
         ffmpeg \
         libxml2-dev \
         shadow \
@@ -20,9 +18,10 @@ RUN apk add --update \
         imagemagick \
         libtool \
         $PHPIZE_DEPS \
-    && pecl install xdebug-2.9.8 redis imagick-3.4.3 \
+    && pecl install xdebug-2.9.8 imagick-3.4.3 \
     && docker-php-ext-install pdo pdo_mysql zip exif \ 
-    && docker-php-ext-enable xdebug redis imagick \
+    && docker-php-ext-enable xdebug imagick \
+    # composer
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
     && docker-php-ext-configure gd \
       --with-freetype=/usr/include/ \

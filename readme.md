@@ -13,6 +13,7 @@ docker-compose up -d
 # Build the specific image
 docker-compose build php71
 docker-compose build golang
+docker-compose build python
 ```
 
 ### Start the services
@@ -35,6 +36,8 @@ docker-compose exec php80 /bin/sh
 docker-compose exec php81 /bin/sh
 docker-compose exec php82 /bin/sh
 
+docker-compose exec php82_nginx /bin/sh
+
 docker-compose exec redis /bin/sh
 
 docker-compose exec mysql57 bash
@@ -43,6 +46,8 @@ docker-compose exec mysql80 bash
 docker-compose exec mariadb bash
 
 docker-compose exec golang bash
+
+docker-compose exec python bash
 ```
 
 ### Working Directory
@@ -54,58 +59,84 @@ docker-compose restart nginx
 docker-compose restart mysql80
 ```
 
-Or just restart all services. If you have changed the service's configurations, stop all services first to avoid read the old settings.
+Or just restart all services. If you have changed the service's configurations, stop all services first to avoid reading the old settings.
 ```shell
 docker-compose down
 docker-compose up -d
 ```
+
 
 ## Services
 
+### Nginx + PHP
+In this container, PHP and Nginx can be started simultaneously.
 
-### Nginx 
-| Version |
-| ------- |
-| latest  |
+| Service    | Version |
+| ---------- | ------- |
+| PHP        | 8.2     |
+| Nginx      | latest  |
+| Supervisor | latest  |
 
-Store your nginx configurations in the [conf folder](\services\nginx\conf.d\template) folder using a file extension of ``conf.template``. After create or edit the conf file you need to restart the service.
 ```shell
-docker-compose down
-docker-compose up -d
+docker-compose exec php82_nginx /bin/sh
 ```
 
 #### Default configurations
+| File                         | URL                             |
+| ---------------------------- | ------------------------------- |
+| conf.d/nginx.conf            | http://127.0.0.1:1014           |
+
+#### Environment variables
+| variable                 | default |
+| ------------------------ | ------- |
+| PHP82_NGINX_PORT         | 1014    |
+
+
+
+### Nginx 
+| Service    | Version |
+| ---------- | ------- |
+| Nginx      | latest  |
+
+Store your nginx configurations in the [conf folder](\services\nginx\conf.d\template\www) folder using a file extension of ``conf.template``. After create or edit the conf file you need to restart the service.
+
+```shell
+docker-compose exec nginx /bin/sh
+```
+
+#### Default configurations
+All the websites are created in other containers.
 
 | File                         | URL                             |
 | ---------------------------- | ------------------------------- |
-| default-site.conf.template   | http://127.0.0.1:1001/phpinfo <br/> http://127.0.0.1:1001/opcache |
-| default-ssl.conf.template    | https://127.0.0.1:1002/phpinfo <br/> http://127.0.0.1:1002/opcache |
-| default-swoole.conf.template | https://127.0.0.1:1003/7.4 <br/> https://127.0.0.1:1003/8.0 <br/> https://127.0.0.1:1003/8.1 <br/> https://127.0.0.1:1003/8.2 |
-| project-site.conf.template   | http://127.0.0.1:1011           |
-| project-ssl.conf.template    | https://127.0.0.1:1012          |
-| project-swoole.conf.template | https://127.0.0.1:1013          |
+| [site.conf](\services\nginx\conf.d\template\default\site.conf.template) | http://127.0.0.1:1001/phpinfo <br/> http://127.0.0.1:1001/opcache |
+| [ssl.conf](\services\nginx\conf.d\template\default\ssl.conf.template) | https://127.0.0.1:1002/phpinfo <br/> http://127.0.0.1:1002/opcache |
+| [swoole.conf](\services\nginx\conf.d\template\default\swoole.conf.template) | https://127.0.0.1:1003/7.4 <br/> https://127.0.0.1:1003/8.0 <br/> https://127.0.0.1:1003/8.1 <br/> https://127.0.0.1:1003/8.2 |
+| [project-site.conf](\services\nginx\conf.d\template\default\project-site.conf.template) | http://127.0.0.1:1011           |
+| [project-ssl.conf](\services\nginx\conf.d\template\default\project-ssl.conf.template) | https://127.0.0.1:1012          |
+| [project-swoole.conf](\services\nginx\conf.d\template\default\project-swoole.conf.template) | https://127.0.0.1:1013          |
 
 #### Environment variables
+| configuration               | variable                    | default |
+| --------------------------- | --------------------------- | ------- |
+| port of [site.conf](\services\nginx\conf.d\template\default\site.conf.template) | NGINX_SITE_PORT             | 1001    |
+| port of [ssl.conf](\services\nginx\conf.d\template\default\ssl.conf.template) | NGINX_SITE_SSL_PORT         | 1002    |
+| port of [swoole.conf](\services\nginx\conf.d\template\default\swoole.conf.template) | NGINX_SWOOLE_PORT           | 1003    |
+| port of [project-site.conf](\services\nginx\conf.d\template\default\project-site.conf.template) | NGINX_PROJECT_SITE_PORT     | 1011    |
+| port of [project-ssl.conf](\services\nginx\conf.d\template\default\project-ssl.conf.template) | NGINX_PROJECT_SITE_SSL_PORT | 1012    |
+| port of [project-swoole.conf](\services\nginx\conf.d\template\default\project-swoole.conf.template) | NGINX_PROJECT_SWOOLE_PORT   | 1013    |
 
-| variable                 | default |
-| ------------------------ | ------- |
-| PHPINFO_PORT             | 1001    |
-| PHPINFO_SSL_PORT         | 1002    |
-| PHPINFO_SWOOLE_PORT      | 1003    |
-| DEFAULT_SITE_PORT        | 1011    |
-| DEFAULT_SITE_SSL_PORT    | 1012    |
-| DEFAULT_SITE_SWOOLE_PORT | 1013    |
 
 
 ### PHP
-| Version | Swoole   | ImageMagick   | Opache |
-| ------- | :------: | :-----------: | :----: |
-| 5.6     |          |               |        |
-| 7.1     |          | v             |        |
-| 7.4     | v        | v             | v      |
-| 8.0     | v        | v             | v      |
-| 8.1     | v        | v             | v      |
-| 8.2     | v        | v             | v      |
+| Service    | Version | Swoole   | ImageMagick   | Opache |
+| ---------- | ------- | -------- | ------------- | ------ |
+| PHP        | 5.6     |          |               |        |
+| PHP        | 7.1     |          | v             |        |
+| PHP        | 7.4     | v        | v             | v      |
+| PHP        | 8.0     | v        | v             | v      |
+| PHP        | 8.1     | v        | v             | v      |
+| PHP        | 8.2     | v        | v             | v      |
 
 #### Enter Container
 ```shell
@@ -124,12 +155,11 @@ docker-compose exec php82 /bin/sh
 2. Create the [conf file](services\nginx\conf.d\template\project-laravel.conf.template) in nginx.
 
 #### Swoole
-1. After entering the php container, run the [swoole.php](www\default\public\swoole.php).
+1. After entering the php container, run the [swoole.php](www\default\public\swoole.php) can start the swoole service.
     ```shell
     php swoole.php
     ```
 2. Create the [conf file](services\nginx\conf.d\template\project-swoole.conf.template) in nginx.
-
 
 #### ImageMagick
 1. Run the [test.sh](www\imagick\test.sh) for testing the ImageMagick commands.
@@ -141,9 +171,8 @@ docker-compose exec php82 /bin/sh
 
 
 
-### supervisor
+### Supervisor
 #### Environment variables
-
 | configuration | variable          | default |
 | ------------- | ----------------- | ------- |
 | web ui port   | SUPERVISOR_PORT   | 1040    |
@@ -156,10 +185,10 @@ docker-compose exec supervisor bash
 
 
 ### Mysql
-| Version | phpmyadmin |
-| ------- | ---------- |
-| 5.7     | v          |
-| 8.0     | v          |
+| Service    | Version | phpmyadmin (in phpmyadmin container) |
+| ---------- | ------- | ------------------------------------ |
+| Mysql      | 5.7     | v                                    |
+| Mysql      | 8.0     | v                                    |
 
 #### Environment variables
 | configuration        | variable                   | default |
@@ -182,10 +211,12 @@ Another way to connect the mysql service without entering the container is using
 mysql --host=localhost --port=6306 -uroot --default-character-set=utf8
 ```
 
-### mariadb
-| Version | phpmyadmin |
-| ------- | ---------- |
-| 10.2.10 | v          |
+
+
+### Mariadb
+| Service    | Version | phpmyadmin (in phpmyadmin container) |
+| ---------- | ------- | ------------------------------------ |
+| Mariadb    | 10.2.10 | v                                    |
 
 #### Environment variables
 | configuration | variable        | default |
@@ -199,24 +230,26 @@ The working directory is [www](www), put the sql files in this folder for import
 docker-compose exec mariadb bash
 ```
 
+
+
 ### Redis
-| Version | phpredisadmin |
-| ------- | ------------- |
-| latest  | v             |
+| Service | Version | phpredisadmin (in phpredisadmin container) |
+| ------- | ------- | ------------------------------------------ |
+| Redis   | latest  | v                                          |
 
 #### Environment variables
-
 | configuration | variable   | default |
 | ------------- | ---------- | ------- |
 | port          | REDIS_PORT | 6379    |
 
 #### Container
-
 ```shell
 docker-compose exec redis /bin/sh
 
 redis-cli --raw
 ```
+
+
 
 ### phpmyadmin
 #### Environment variables
@@ -227,12 +260,13 @@ redis-cli --raw
 | port          | PHPMYADMIN_PORT | 81      |
 
 
+
 ### phpredisadmin
 #### Environment variables
-
 | configuration | variable          | default |
 | ------------- | ----------------- | ------- |
 | port          | REDISMYADMIN_PORT | 82      |
+
 
 
 ### SSL
@@ -242,10 +276,9 @@ openssl req -x509 -nodes -days 3650 -newkey rsa:2048 -keyout ssl.key -out ssl.cs
 
 
 ### Golang
-
-| Version | Tesseract OCR | ImageMagick   |
-| ------- | :-----------: | :-----------: |
-| latest  | v             |               |
+| Service    | Version | Tesseract OCR |
+| ---------- | ------- | ------------- |
+| Golang     | latest  | v             |
 
 #### Container
 After enter the container the working directory is [www](www).
@@ -258,3 +291,7 @@ docker-compose exec golang bash
 ```shell
 tesseract --version
 ```
+
+
+### Chrome
+For laravel dusk

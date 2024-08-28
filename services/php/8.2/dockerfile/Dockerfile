@@ -1,34 +1,39 @@
 FROM php:8.2-fpm-alpine
 
 RUN apk add --update \
-        libzip-dev \
         npm \
         git \
+        libzip-dev \
         freetype \
         libjpeg-turbo \
         libpng \
         freetype-dev \
         libjpeg-turbo-dev \
-        autoconf \
-        g++ \
-        make \
-        gcc \
         linux-headers \
         openssl \
+        # openssl-dev \
         ffmpeg \
         libxml2-dev \
         imagemagick-dev \
         imagemagick \
         libtool \
         $PHPIZE_DEPS \
-    && pecl install xdebug swoole redis imagick \
+    && pecl install xdebug swoole redis imagick mongodb \
     && docker-php-ext-install pdo pdo_mysql zip exif opcache \ 
-    && docker-php-ext-enable xdebug swoole redis imagick opcache \
+    && docker-php-ext-enable opcache xdebug swoole redis imagick mongodb \
+    # composer
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
     && docker-php-ext-configure gd \
       --with-freetype=/usr/include/ \
       --with-jpeg=/usr/include/ \
     && docker-php-ext-install -j$(nproc) gd \
+    # ioncube loader
+    && curl -fSL http://downloads3.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz -o ioncube.tar.gz \
+    && mkdir -p ioncube \
+    && tar -xf ioncube.tar.gz -C ioncube --strip-components=1 \
+    && rm ioncube.tar.gz \
+    && mv ioncube/ioncube_loader_lin_8.2.so /usr/local/lib/php/extensions/ioncube_loader_lin_8.2.so \
+    && rm -r ioncube \
     && apk del --no-cache \
       freetype-dev \
       libjpeg-turbo-dev \

@@ -4,23 +4,40 @@ networks:
   www:
   
 services:
+  php82_nginx:
+    build:
+      context: .
+      dockerfile: ${VOLUME_ROOT}/services/php_nginx/8.2/dockerfile/Dockerfile
+      args:
+        VOLUME_ROOT: "${VOLUME_ROOT}/services/php_nginx/8.2"
+    tty: true
+    volumes:
+      - "${VOLUME_ROOT}/services/php_nginx/8.2/conf.d/nginx.conf:/etc/nginx/http.d/default.conf"
+      - "${VOLUME_ROOT}/services/php_nginx/8.2/conf.d/supervisord.conf:/etc/supervisor/conf.d/supervisord.conf"
+      - "${VOLUME_ROOT}/www:/var/www/html"
+      - "${VOLUME_ROOT}/log/php_nginx/8.2:/var/log/nginx"
+    ports:
+      - "${PHP82_NGINX_PORT}:80"
+    networks:
+      - www
+
   nginx:
     restart: always
     image: nginx:alpine
     volumes: 
       - "${VOLUME_ROOT}/www:/var/www/html"
-      - "${VOLUME_ROOT}/services/nginx/conf.d/template:/etc/nginx/templates"
+      - "${VOLUME_ROOT}/services/nginx/conf.d:/etc/nginx/templates"
       - "${VOLUME_ROOT}/services/nginx/ssl:/etc/nginx/ssl"
       - "${VOLUME_ROOT}/log/nginx:/var/log/nginx"
     environment:
       LOG_ROOT: /var/log/nginx
     ports:
-      - "${PHPINFO_PORT}:1001"
-      - "${PHPINFO_SSL_PORT}:1002"
-      - "${PHPINFO_SWOOLE_PORT}:1003"
-      - "${DEFAULT_SITE_PORT}:1011"
-      - "${DEFAULT_SITE_SSL_PORT}:1012"
-      - "${DEFAULT_SITE_SWOOLE_PORT}:1013"
+      - "${NGINX_SITE_PORT}:1001"
+      - "${NGINX_SITE_SSL_PORT}:1002"
+      - "${NGINX_SWOOLE_PORT}:1003"
+      - "${NGINX_PROJECT_SITE_PORT}:1011"
+      - "${NGINX_PROJECT_SITE_SSL_PORT}:1012"
+      - "${NGINX_PROJECT_SWOOLE_PORT}:1013"
       - "8000-8040:8000-8040"
     depends_on:
       - php56
@@ -34,6 +51,7 @@ services:
       - mariadb
       - redis
       - golang
+      - python
     networks:
       - www
   
@@ -75,6 +93,20 @@ services:
       TZ: ${TZ}
     ports:
       - "7000-7030:7000-7030"
+    networks:
+      - www
+
+  python:
+    build:
+      context: .
+      dockerfile: ${VOLUME_ROOT}/services/python/dockerfile/Dockerfile
+    tty: true
+    volumes:
+      - "${VOLUME_ROOT}/www:/var/www/html"
+    environment: 
+      TZ: ${TZ}
+    ports:
+      - "6000-6030:6000-6030"
     networks:
       - www
 

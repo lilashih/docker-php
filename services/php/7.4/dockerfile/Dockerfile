@@ -1,20 +1,18 @@
 FROM php:7.4-fpm-alpine
 
 RUN apk add --update \
-        libzip-dev \
         npm \
         git \
+        libzip-dev \
+        libressl-dev \
         freetype \
         libjpeg-turbo \
         libpng \
         freetype-dev \
         libjpeg-turbo-dev \
-        autoconf \
-        g++ \
-        make \
-        gcc \
         linux-headers \
         openssl \
+        openssl-dev \
         ffmpeg \
         libxml2-dev \
         imagemagick-dev \
@@ -24,6 +22,7 @@ RUN apk add --update \
     && pecl install xdebug-3.1.6 swoole-4.8.13 redis imagick \
     && docker-php-ext-install pdo pdo_mysql zip exif opcache \ 
     && docker-php-ext-enable xdebug swoole redis imagick opcache \
+    # composer
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
     && docker-php-ext-configure gd \
       --with-freetype=/usr/include/ \
