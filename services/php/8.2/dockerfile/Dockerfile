@@ -11,18 +11,21 @@ RUN apk add --update \
         libjpeg-turbo-dev \
         linux-headers \
         openssl \
-        # openssl-dev \
+        openssl-dev \
         ffmpeg \
         libxml2-dev \
         imagemagick-dev \
         imagemagick \
         libtool \
         $PHPIZE_DEPS \
+    && pecl channel-update pecl.php.net \
     && pecl install xdebug swoole redis imagick mongodb \
     && docker-php-ext-install pdo pdo_mysql zip exif opcache \ 
     && docker-php-ext-enable opcache xdebug swoole redis imagick mongodb \
     # composer
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
+    && composer global require laravel/installer \
+    && export PATH="$PATH:/root/.composer/vendor/bin" \
     && docker-php-ext-configure gd \
       --with-freetype=/usr/include/ \
       --with-jpeg=/usr/include/ \
@@ -38,5 +41,9 @@ RUN apk add --update \
       freetype-dev \
       libjpeg-turbo-dev \
       libpng-dev \
-    && rm -rf /tmp/*
+    && rm -rf /tmp/* \
+    && rm -rf /var/cache/apk/*
+
+ENV PATH="/root/.composer/vendor/bin:${PATH}"
+
 WORKDIR /var/www/html

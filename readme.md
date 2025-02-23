@@ -82,9 +82,9 @@ docker-compose exec php82_nginx /bin/sh
 ```
 
 #### Default configurations
-| File                         | URL                             |
-| ---------------------------- | ------------------------------- |
-| conf.d/nginx.conf            | http://127.0.0.1:1014           |
+| File                                                             | URL                             |
+| ---------------------------------------------------------------- | ------------------------------- |
+| [conf.d/nginx.conf](services/php_nginx/8.2/conf.d/nginx.conf)    | http://127.0.0.1:1014           |
 
 #### Environment variables
 | variable                 | default |
@@ -98,7 +98,7 @@ docker-compose exec php82_nginx /bin/sh
 | ---------- | ------- |
 | Nginx      | latest  |
 
-Store your nginx configurations in the [conf folder](\services\nginx\conf.d\template\www) folder using a file extension of ``conf.template``. After create or edit the conf file you need to restart the service.
+Store your nginx configurations in the [conf folder](services/nginx/conf.d/template/www) folder using a file extension of ``conf.template``. After create or edit the conf file you need to restart the service.
 
 ```shell
 docker-compose exec nginx /bin/sh
@@ -109,34 +109,34 @@ All the websites are created in other containers.
 
 | File                         | URL                             |
 | ---------------------------- | ------------------------------- |
-| [site.conf](\services\nginx\conf.d\template\default\site.conf.template) | http://127.0.0.1:1001/phpinfo <br/> http://127.0.0.1:1001/opcache |
-| [ssl.conf](\services\nginx\conf.d\template\default\ssl.conf.template) | https://127.0.0.1:1002/phpinfo <br/> http://127.0.0.1:1002/opcache |
-| [swoole.conf](\services\nginx\conf.d\template\default\swoole.conf.template) | https://127.0.0.1:1003/7.4 <br/> https://127.0.0.1:1003/8.0 <br/> https://127.0.0.1:1003/8.1 <br/> https://127.0.0.1:1003/8.2 |
-| [project-site.conf](\services\nginx\conf.d\template\default\project-site.conf.template) | http://127.0.0.1:1011           |
-| [project-ssl.conf](\services\nginx\conf.d\template\default\project-ssl.conf.template) | https://127.0.0.1:1012          |
-| [project-swoole.conf](\services\nginx\conf.d\template\default\project-swoole.conf.template) | https://127.0.0.1:1013          |
+| [site.conf](services/nginx/conf.d/default/site.conf.template) | http://127.0.0.1:1001/phpinfo <br/> http://127.0.0.1:1001/opcache |
+| [ssl.conf](services/nginx/conf.d/default/ssl.conf.template) | https://127.0.0.1:1002/phpinfo <br/> http://127.0.0.1:1002/opcache |
+| [swoole.conf](services/nginx/conf.d/default/swoole.conf.template) | https://127.0.0.1:1003/7.4 <br/> https://127.0.0.1:1003/8.0 <br/> https://127.0.0.1:1003/8.1 <br/> https://127.0.0.1:1003/8.2 |
+| [project-site.conf](services/nginx/conf.d/default/project-site.conf.template) | http://127.0.0.1:1011 |
+| [project-ssl.conf](services/nginx/conf.d/default/project-ssl.conf.template) | https://127.0.0.1:1012 |
+| [project-swoole.conf](services/nginx/conf.d/default/project-swoole.conf.template) | https://127.0.0.1:1013 |
 
 #### Environment variables
 | configuration               | variable                    | default |
 | --------------------------- | --------------------------- | ------- |
-| port of [site.conf](\services\nginx\conf.d\template\default\site.conf.template) | NGINX_SITE_PORT             | 1001    |
-| port of [ssl.conf](\services\nginx\conf.d\template\default\ssl.conf.template) | NGINX_SITE_SSL_PORT         | 1002    |
-| port of [swoole.conf](\services\nginx\conf.d\template\default\swoole.conf.template) | NGINX_SWOOLE_PORT           | 1003    |
-| port of [project-site.conf](\services\nginx\conf.d\template\default\project-site.conf.template) | NGINX_PROJECT_SITE_PORT     | 1011    |
-| port of [project-ssl.conf](\services\nginx\conf.d\template\default\project-ssl.conf.template) | NGINX_PROJECT_SITE_SSL_PORT | 1012    |
-| port of [project-swoole.conf](\services\nginx\conf.d\template\default\project-swoole.conf.template) | NGINX_PROJECT_SWOOLE_PORT   | 1013    |
+| port of [site.conf](services/nginx/conf.d/default/site.conf.template) | NGINX_SITE_PORT | 1001 |
+| port of [ssl.conf](services/nginx/conf.d/default/ssl.conf.template) | NGINX_SITE_SSL_PORT | 1002 |
+| port of [swoole.conf](services/nginx/conf.d/default/swoole.conf.template) | NGINX_SWOOLE_PORT | 1003 |
+| port of [project-site.conf](services/nginx/conf.d/default/project-site.conf.template) | NGINX_PROJECT_SITE_PORT | 1011 |
+| port of [project-ssl.conf](services/nginx/conf.d/default/project-ssl.conf.template) | NGINX_PROJECT_SITE_SSL_PORT | 1012 |
+| port of [project-swoole.conf](services/nginx/conf.d/default/project-swoole.conf.template) | NGINX_PROJECT_SWOOLE_PORT | 1013 |
 
 
 
 ### PHP
-| Service    | Version | Swoole   | ImageMagick   | Opache |
-| ---------- | ------- | -------- | ------------- | ------ |
-| PHP        | 5.6     |          |               |        |
-| PHP        | 7.1     |          | v             |        |
-| PHP        | 7.4     | v        | v             | v      |
-| PHP        | 8.0     | v        | v             | v      |
-| PHP        | 8.1     | v        | v             | v      |
-| PHP        | 8.2     | v        | v             | v      |
+| Service    | Version | ImageMagick | Swoole | Opache |
+| ---------- | ------- | ----------- | ------ | ------ |
+| PHP        | 5.6     |             |        |        |
+| PHP        | 7.1     | v           |        |        |
+| PHP        | 7.4     | v           | v      | v      |
+| PHP        | 8.0     | v           | v      | v      |
+| PHP        | 8.1     | v           | v      | v      |
+| PHP        | 8.2     | v           | v      | v      |
 
 #### Enter Container
 ```shell
@@ -152,17 +152,21 @@ docker-compose exec php82 /bin/sh
     ```shell
     composer create-project --prefer-dist laravel/laravel blog
     ```
-2. Create the [conf file](services\nginx\conf.d\template\project-laravel.conf.template) in nginx.
+2. Create the [conf file](services/nginx/conf.d/default/project-site.conf.template) in nginx.
+3. Restart the docker services.
+    ```shell
+    docker-compose up -d
+    ```
 
 #### Swoole
-1. After entering the php container, run the [swoole.php](www\default\public\swoole.php) can start the swoole service.
+1. After entering the php container, run the [swoole.php](www/default/public/swoole.php) can start the swoole service.
     ```shell
     php swoole.php
     ```
-2. Create the [conf file](services\nginx\conf.d\template\project-swoole.conf.template) in nginx.
+2. Create the [conf file](services/nginx/conf.d/default/project-swoole.conf.template) in nginx.
 
 #### ImageMagick
-1. Run the [test.sh](www\imagick\test.sh) for testing the ImageMagick commands.
+1. Run the [test.sh](www/imagick/test.sh) for testing the ImageMagick commands.
     ```shell
     docker-compose exec php80 /bin/sh
     cd ../imagick
@@ -180,8 +184,9 @@ docker-compose exec php82 /bin/sh
 #### Enter Container
 ```shell
 docker-compose exec supervisor bash
-```
 
+
+```
 
 
 ### Mysql
@@ -293,5 +298,18 @@ tesseract --version
 ```
 
 
-### Chrome
-For laravel dusk
+### Python
+| Service    | Version |
+| ---------- | ------- |
+| Python     | latest  |
+
+#### Container
+After enter the container the working directory is [www](www).
+
+```shell
+docker-compose exec python bash
+```
+
+
+### Chrome & Selenium-hub
+These services are for web UI tests, like laravel dusk
