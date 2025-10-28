@@ -1,5 +1,8 @@
 FROM php:7.4-fpm-alpine
 
+ARG XDEBUG_VERSION=3.1.6
+ARG SWOOLE_VERSION=4.8.13
+
 RUN apk add --update \
         npm \
         git \
@@ -18,10 +21,11 @@ RUN apk add --update \
         imagemagick-dev \
         imagemagick \
         libtool \
+        postgresql-dev \
         $PHPIZE_DEPS \
     && pecl channel-update pecl.php.net \
-    && pecl install xdebug-3.1.6 swoole-4.8.13 redis imagick \
-    && docker-php-ext-install pdo pdo_mysql zip exif opcache \ 
+    && pecl install xdebug-${XDEBUG_VERSION} swoole-${SWOOLE_VERSION} redis imagick \
+    && docker-php-ext-install pdo pdo_mysql mysqli zip exif opcache pgsql pdo_pgsql \ 
     && docker-php-ext-enable xdebug swoole redis imagick opcache \
     # composer
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \

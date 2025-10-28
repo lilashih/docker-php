@@ -1,5 +1,8 @@
 FROM php:7.1-fpm-alpine
 
+ARG XDEBUG_VERSION=2.9.8
+ARG IMAGICK_VERSION=3.4.3
+
 RUN apk add --update \
         npm \
         git \
@@ -17,10 +20,11 @@ RUN apk add --update \
         imagemagick-dev \
         imagemagick \
         libtool \
+        postgresql-dev \
         $PHPIZE_DEPS \
     && pecl channel-update pecl.php.net \
-    && pecl install xdebug-2.9.8 imagick-3.4.3 \
-    && docker-php-ext-install pdo pdo_mysql zip exif \ 
+    && pecl install xdebug-${XDEBUG_VERSION} imagick-${IMAGICK_VERSION} \
+    && docker-php-ext-install pdo pdo_mysql mysqli zip exif pgsql pdo_pgsql \ 
     && docker-php-ext-enable xdebug imagick \
     # composer
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \

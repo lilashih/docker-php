@@ -1,5 +1,9 @@
 FROM php:8.0-fpm-alpine
 
+ARG XDEBUG_VERSION=3.2.0
+ARG SWOOLE_VERSION=5.0.2
+ARG MONGODB_VERSION=1.16.0
+
 RUN apk add --update \
         npm \
         git \
@@ -20,7 +24,7 @@ RUN apk add --update \
         libtool \
         $PHPIZE_DEPS \
     && pecl channel-update pecl.php.net \
-    && pecl install xdebug-3.2.0 swoole-5.0.2 redis imagick mongodb \
+    && pecl install xdebug-${XDEBUG_VERSION} swoole-${SWOOLE_VERSION} redis imagick mongodb-${MONGODB_VERSION} \
     && docker-php-ext-install pdo pdo_mysql zip exif opcache \ 
     && docker-php-ext-enable xdebug opcache swoole redis imagick mongodb \
     # composer

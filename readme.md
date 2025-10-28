@@ -4,71 +4,72 @@ Building the development environment quickly.
 ## .env
 Copy the .env.example file to .env.
 
-## Run
-### First installation
-```shell
-docker-compose build
-docker-compose up -d
 
-# Build the specific image
-docker-compose build php71
-docker-compose build golang
-docker-compose build python
-```
-
-### Start the services
-```shell
-docker-compose up -d
-```
-
-### Stop the services
-```shell
-docker-compose down
-```
-
-## Enter the containers
-```shell
-docker-compose exec nginx bash
-
-docker-compose exec php71 /bin/sh
-docker-compose exec php74 /bin/sh
-docker-compose exec php80 /bin/sh
-docker-compose exec php81 /bin/sh
-docker-compose exec php82 /bin/sh
-
-docker-compose exec php82_nginx /bin/sh
-
-docker-compose exec redis /bin/sh
-
-docker-compose exec mysql57 bash
-docker-compose exec mysql80 bash
-
-docker-compose exec mariadb bash
-
-docker-compose exec golang bash
-
-docker-compose exec python bash
-```
-
-### Working Directory
+## Working Directory
 All the containers' working directory is [www](www).
 
-## Restart the containers
-```shell
-docker-compose restart nginx
-docker-compose restart mysql80
-```
+## Command
+- First installation
+    ```shell
+    cp .env.example .env
+    docker-compose build
+    docker-compose up -d
 
-Or just restart all services. If you have changed the service's configurations, stop all services first to avoid reading the old settings.
-```shell
-docker-compose down
-docker-compose up -d
-```
+    # Build the specific image
+    docker-compose build php71
+    docker-compose build golang
+    docker-compose build python
+    ```
+
+- Start the services
+    ```shell
+    docker-compose up -d
+    ```
+
+- Stop the services
+    ```shell
+    docker-compose down
+    ```
+
+- Enter the containers
+    ```shell
+    docker-compose exec nginx bash
+
+    docker-compose exec php71 /bin/sh
+    docker-compose exec php74 /bin/sh
+    docker-compose exec php80 /bin/sh
+    docker-compose exec php81 /bin/sh
+    docker-compose exec php82 /bin/sh
+
+    docker-compose exec php82_nginx /bin/sh
+
+    docker-compose exec redis /bin/sh
+
+    docker-compose exec mysql57 bash
+    docker-compose exec mysql80 bash
+
+    docker-compose exec mariadb bash
+
+    docker-compose exec golang bash
+
+    docker-compose exec python bash
+    ```
+- Restart the containers
+    ```shell
+    docker-compose restart nginx
+    docker-compose restart mysql80
+    ```
+
+    Or just restart all services. If you have changed the service's configurations, stop all services first to avoid reading the old settings.
+    ```shell
+    docker-compose down
+    docker-compose up -d
+    ```
 
 
 ## Services
 
-### Nginx + PHP
+### ✔️ Nginx + PHP
 In this container, PHP and Nginx can be started simultaneously.
 
 | Service    | Version |
@@ -93,7 +94,7 @@ docker-compose exec php82_nginx /bin/sh
 
 
 
-### Nginx 
+### ✔️ Nginx 
 | Service    | Version |
 | ---------- | ------- |
 | Nginx      | latest  |
@@ -128,7 +129,7 @@ All the websites are created in other containers.
 
 
 
-### PHP
+### ✔️ PHP
 | Service    | Version | ImageMagick | Swoole | Opache |
 | ---------- | ------- | ----------- | ------ | ------ |
 | PHP        | 5.6     |             |        |        |
@@ -175,7 +176,7 @@ docker-compose exec php82 /bin/sh
 
 
 
-### Supervisor
+### ✔️ Supervisor
 #### Environment variables
 | configuration | variable          | default |
 | ------------- | ----------------- | ------- |
@@ -189,7 +190,7 @@ docker-compose exec supervisor bash
 ```
 
 
-### Mysql
+### ✔️ Mysql
 | Service    | Version | phpmyadmin (in phpmyadmin container) |
 | ---------- | ------- | ------------------------------------ |
 | Mysql      | 5.7     | v                                    |
@@ -218,7 +219,7 @@ mysql --host=localhost --port=6306 -uroot --default-character-set=utf8
 
 
 
-### Mariadb
+### ✔️ Mariadb
 | Service    | Version | phpmyadmin (in phpmyadmin container) |
 | ---------- | ------- | ------------------------------------ |
 | Mariadb    | 10.2.10 | v                                    |
@@ -237,7 +238,7 @@ docker-compose exec mariadb bash
 
 
 
-### Redis
+### ✔️ Redis
 | Service | Version | phpredisadmin (in phpredisadmin container) |
 | ------- | ------- | ------------------------------------------ |
 | Redis   | latest  | v                                          |
@@ -256,7 +257,7 @@ redis-cli --raw
 
 
 
-### phpmyadmin
+### ✔️ phpmyadmin
 #### Environment variables
 - [config.inc.php](https://github.com/phpmyadmin/docker/blob/master/config.inc.php)
 
@@ -266,7 +267,7 @@ redis-cli --raw
 
 
 
-### phpredisadmin
+### ✔️ phpredisadmin
 #### Environment variables
 | configuration | variable          | default |
 | ------------- | ----------------- | ------- |
@@ -274,13 +275,13 @@ redis-cli --raw
 
 
 
-### SSL
+### ✔️ SSL
 ```shell
 openssl req -x509 -nodes -days 3650 -newkey rsa:2048 -keyout ssl.key -out ssl.csr
 ```
 
 
-### Golang
+### ✔️ Golang
 | Service    | Version | Tesseract OCR |
 | ---------- | ------- | ------------- |
 | Golang     | latest  | v             |
@@ -298,7 +299,7 @@ tesseract --version
 ```
 
 
-### Python
+### ✔️ Python
 | Service    | Version |
 | ---------- | ------- |
 | Python     | latest  |
@@ -311,5 +312,5 @@ docker-compose exec python bash
 ```
 
 
-### Chrome & Selenium-hub
-These services are for web UI tests, like laravel dusk
+### ✔️ Chrome & Selenium-hub
+These services are for web UI tests, like laravel dusk.
