@@ -1,3 +1,7 @@
 *
 !.gitignore
 !additional.conf.template
+!default/
+!default/
+!default/**
+!www/

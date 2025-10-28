@@ -1,0 +1,16 @@
+server {
+    listen 1013 ssl;
+    server_name localhost;
+
+    ssl_certificate /etc/nginx/ssl/ssl.csr;
+    ssl_certificate_key /etc/nginx/ssl/ssl.key;
+    
+    error_log  ${LOG_ROOT}/swoole.error.log;
+    access_log ${LOG_ROOT}swoole.access.log;
+
+    location / {
+        if (!-e $request_filename) {
+            proxy_pass http://php82:7000;
+        }
+    }
+}
