@@ -1,8 +1,8 @@
-FROM php:7.4-fpm-alpine
+FROM php:7.2-fpm-alpine
 
 # 定義版本變數
-ARG XDEBUG_VERSION=3.1.6
-ARG SWOOLE_VERSION=4.8.13
+ARG XDEBUG_VERSION=2.9.8
+ARG IMAGICK_VERSION=3.4.4
 
 # 設定環境變數
 ENV PATH="/root/.composer/vendor/bin:${PATH}"
@@ -12,10 +12,11 @@ ENV PATH="/root/.composer/vendor/bin:${PATH}"
 RUN apk add --update \
         npm \
         git \
-        libressl-dev \
         freetype \
         libjpeg-turbo \
         libpng \
+        freetype-dev \
+        linux-headers \
         openssl \
         ffmpeg \
         imagemagick \
@@ -28,6 +29,7 @@ RUN apk add --update \
         linux-headers \
         libzip-dev \
         libpng-dev \
+        libressl-dev \
         libjpeg-turbo-dev \
         freetype-dev \
         imagemagick-dev \
@@ -39,15 +41,19 @@ RUN apk add --update \
     && pecl channel-update pecl.php.net \
     \
     # 配置並安裝 PHP 內置擴展
-    && pecl install xdebug-${XDEBUG_VERSION} swoole-${SWOOLE_VERSION} redis imagick \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && pecl install xdebug-${XDEBUG_VERSION} imagick-${IMAGICK_VERSION} \
+    && docker-php-ext-configure gd \
+      --with-freetype-dir=/usr/include/ \
+      --with-png-dir=/usr/include/ \
+      --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install -j$(nproc) pdo pdo_mysql mysqli zip exif opcache pgsql pdo_pgsql gd \
-    && docker-php-ext-enable xdebug swoole redis imagick opcache \
+    && docker-php-ext-enable xdebug imagick opcache \
     \
     # composer
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
     && composer global require laravel/installer \
     && export PATH="$PATH:/root/.composer/vendor/bin" \
+    && composer self-update 1.10.15 \
     \
     # 清理刪除所有編譯用的臨時套件與暫存檔
     && apk del .build-deps \

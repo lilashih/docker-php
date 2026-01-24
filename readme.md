@@ -19,6 +19,8 @@ All the containers' working directory is [www](www).
     docker-compose build php71
     docker-compose build golang
     docker-compose build python
+
+    docker compose build --no-cache php71
     ```
 
 - Start the services
