@@ -8,6 +8,6 @@ if (function_exists('opcache_reset') && $clear) {
     // var_dump(opcache_get_status());
 }
 
-versions(['5.6', '7.1', '7.4', '8.0', '8.1', '8.2'], 'phpinfo');
+versions(['5.6', '7.1', '7.2', '7.4', '8.0', '8.1', '8.2'], 'phpinfo');
 
 phpinfo();

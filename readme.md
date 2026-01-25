@@ -135,6 +135,7 @@ All the websites are created in other containers.
 | Service    | Version | ImageMagick | Swoole | Opache |
 | ---------- | ------- | ----------- | ------ | ------ |
 | PHP        | 5.6     |             |        |        |
+| PHP        | 7.2     | v           |        |        |
 | PHP        | 7.1     | v           |        |        |
 | PHP        | 7.4     | v           | v      | v      |
 | PHP        | 8.0     | v           | v      | v      |
@@ -144,6 +145,7 @@ All the websites are created in other containers.
 #### Enter Container
 ```shell
 docker-compose exec php71 /bin/sh
+docker-compose exec php72 /bin/sh
 docker-compose exec php74 /bin/sh
 docker-compose exec php80 /bin/sh
 docker-compose exec php81 /bin/sh
@@ -187,8 +189,6 @@ docker-compose exec php82 /bin/sh
 #### Enter Container
 ```shell
 docker-compose exec supervisor bash
-
-
 ```
 
 
